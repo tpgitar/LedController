@@ -1,8 +1,10 @@
 #include "stdio.h"
 #include "stdlib.h"
+#include "math.h"
 
 #include "./LedRgb.h"
 #include "./LedSection.h"
+#include "./TBargraf.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
 #define CO_NUMB_OF_LED_LINES 5
@@ -46,6 +48,18 @@ class TLedRgbLine LedLine[CO_NUMB_OF_LED_LINES] = {
 	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE),
 	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE),
 };
+
+
+class TBargraf Bargraf[CO_NUMB_OF_LED_LINES] = {
+
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 2], CO_NUMB_LEDS_IN_LINE),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE),
+
+};
+
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 void TLedRgbLine::fvMoveDown(uint16_t unStep)
 {
@@ -159,9 +173,11 @@ void TLedRgbLine::fvDropEffect()
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
+#define CO_PI (3.141692f)
 void fvMainLed20ms()
 {
 	static uint16_t unTask = 0;
+
 
 
 
@@ -181,7 +197,7 @@ void fvMainLed20ms()
 				LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,/*300*/ 75 * unLineIdx);
 			}
 
-			unTask = 1;
+			unTask = 2;
 
 			srand(0x1234);
 
@@ -195,12 +211,69 @@ void fvMainLed20ms()
 			LedLine[2].fvDropEffect();
 			LedLine[3].fvDropEffect();
 			LedLine[4].fvDropEffect();
+		}break;
+
+		case 2:
+		{
+			static uint16_t unPom = 0;
+			static float fRadius = 0;
+
+			unPom++;
+			if(unPom > 1000)
+			{unPom = 0;}
+
+			fRadius += CO_PI/100;
+
+
+
+
+
+			int16_t nSin =  static_cast<int16_t>( fabs(sin(fRadius)) * 1000 );
+			Bargraf[0].fvSetNomralizedTo1000(nSin);
+
+			nSin = static_cast<int16_t>( fabs(sin(fRadius + (1* CO_PI/6) ) ) * 1000 );
+			Bargraf[1].fvSetNomralizedTo1000(nSin);
+
+			nSin = static_cast<int16_t>( fabs(sin(fRadius + (2* CO_PI/6) ) ) * 1000 );
+			Bargraf[2].fvSetNomralizedTo1000(nSin);
+
+			nSin = static_cast<int16_t>(fabs(sin(fRadius + (3* CO_PI/6) ) ) * 1000 );
+			Bargraf[3].fvSetNomralizedTo1000(nSin);
+
+			nSin = static_cast<int16_t>( fabs(sin(fRadius + (4* CO_PI/6) ) ) * 1000 );
+			Bargraf[4].fvSetNomralizedTo1000(nSin);
+
+			nSin = static_cast<int16_t>(fabs(sin(fRadius + (5* CO_PI/6) ) ) * 1000 ) ;
+			Bargraf[5].fvSetNomralizedTo1000(nSin);
+
+
+
+
+
+
+/*
+
+			int16_t nSin = static_cast<int16_t>(sin(fRadius) * 500) + 500;
+			Bargraf[0].fvSetNomralizedTo1000(nSin);
+
+			nSin = static_cast<int16_t>(sin(fRadius + CO_PI/6) * 500) + 500;
+			Bargraf[1].fvSetNomralizedTo1000(nSin);
+
+			nSin = static_cast<int16_t>(sin(fRadius + (2* CO_PI/6)) * 500) + 500;
+			Bargraf[2].fvSetNomralizedTo1000(nSin);
+
+			nSin = static_cast<int16_t>(sin(fRadius + (3* CO_PI/6)) * 500) + 500;
+			Bargraf[3].fvSetNomralizedTo1000(nSin);
+
+			nSin = static_cast<int16_t>(sin(fRadius + (4* CO_PI/6)) * 500) + 500;
+			Bargraf[4].fvSetNomralizedTo1000(nSin);
+*/
 
 
 		}break;
 
-	}
 
+	}
 
 	LedLine[0].Refresh();
 }
@@ -290,4 +363,5 @@ void fvMainLed20ms_1()
 
 
 }
+
 
