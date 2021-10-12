@@ -5,6 +5,7 @@
 #include "./LedRgb.h"
 #include "./LedSection.h"
 #include "./TBargraf.h"
+#include "./Random.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
 #define CO_NUMB_OF_LED_LINES 5
@@ -12,12 +13,8 @@
 #define CO_DISP_FREQ 50 //20ms
 
 class TLedRgb Led[CO_WS2812_NUMB_OF_LEDS];
-
-
-
-
+TRandomGenerator RandomGen{0x9832};
 //-----------------------------------------------------------------------------------------------------------------------------
-
 enum {EN_LED_MODE_ZERO,EN_LED_MODE_DROP};
 
 class TLedRgbLine : public TLedRgbSection
@@ -28,7 +25,6 @@ public:
 	TLedRgbLine(const TLedRgb* pLedTabInp, uint16_t unLedTabLenghtInp): TLedRgbSection(pLedTabInp,unLedTabLenghtInp) {}
 	TLedRgbLine(const TLedRgb** ppLedTabInp, uint16_t unLedTabLenghtInp): TLedRgbSection(ppLedTabInp,unLedTabLenghtInp) {}
 
-
 	void fvMoveDown(uint16_t unStep);
 
 	void fvDropEffect();
@@ -38,12 +34,24 @@ public:
 	uint16_t unDelay;
 	uint16_t unSecDelay;
 };
+//-----------------------------------------------------------------------------------------------------------------------------------
 
+const TLedRgb* Line1Leds[] = {
+	&Led[119],&Led[118],&Led[117],&Led[116],&Led[115],&Led[114],&Led[113],&Led[112],&Led[111],&Led[110],
+	&Led[109],&Led[108],&Led[107],&Led[106],&Led[105],&Led[104],&Led[103],&Led[102],&Led[101],&Led[100],
+	&Led[99], &Led[98], &Led[97], &Led[96], &Led[95], &Led[94], &Led[93], &Led[92], &Led[91], &Led[90],
+	&Led[89], &Led[88], &Led[87], &Led[86], &Led[85], &Led[84], &Led[83], &Led[82], &Led[81], &Led[80],
+	&Led[79], &Led[78], &Led[77], &Led[76], &Led[75], &Led[74], &Led[73], &Led[72], &Led[71], &Led[70],
+	&Led[69], &Led[68], &Led[67], &Led[66], &Led[65], &Led[64], &Led[63], &Led[62], &Led[61], &Led[60],
+
+};
+
+//Led[CO_NUMB_LEDS_IN_LINE * 1]
 
 
 class TLedRgbLine LedLine[CO_NUMB_OF_LED_LINES] = {
 	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE),
-	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE),
+	TLedRgbLine(Line1Leds, CO_NUMB_LEDS_IN_LINE),//TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE),
 	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 2], CO_NUMB_LEDS_IN_LINE),
 	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE),
 	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE),
@@ -53,7 +61,7 @@ class TLedRgbLine LedLine[CO_NUMB_OF_LED_LINES] = {
 class TBargraf Bargraf[CO_NUMB_OF_LED_LINES] = {
 
 	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE),
-	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE),
+	TBargraf(Line1Leds, CO_NUMB_LEDS_IN_LINE),	//TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE),
 	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 2], CO_NUMB_LEDS_IN_LINE),
 	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE),
 	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE),
@@ -123,7 +131,10 @@ void TLedRgbLine::fvDropEffect()
 		{
 			SetBrigtness(unLedTabLenght - 1,10);
 
-			unSecDelay =   rand() %  (4 * CO_DISP_FREQ) ;
+			//unSecDelay =   rand() %  (4 * CO_DISP_FREQ) ;
+
+			unSecDelay = RandomGen.funGetRandomValue(60, 180);
+
 
 			unTask = 2;
 		}break;
@@ -199,7 +210,7 @@ void fvMainLed20ms()
 
 			unTask = 2;
 
-			srand(0x1234);
+
 
 		}break;
 
