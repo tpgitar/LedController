@@ -47,40 +47,40 @@ const TLedRgb* Line0Leds[] = {
 
 
 const TLedRgb* Line1Leds[] = {
-	&Led[119],&Led[118],&Led[117],&Led[116],&Led[115],&Led[114],&Led[113],&Led[112],&Led[111],&Led[110],
-	&Led[109],&Led[108],&Led[107],&Led[106],&Led[105],&Led[104],&Led[103],&Led[102],&Led[101],&Led[100],
-	&Led[99], &Led[98], &Led[97], &Led[96], &Led[95], &Led[94], &Led[93], &Led[92], &Led[91], &Led[90],
-	&Led[89], &Led[88], &Led[87], &Led[86], &Led[85], &Led[84], &Led[83], &Led[82], &Led[81], &Led[80],
-	&Led[79], &Led[78], &Led[77], &Led[76], &Led[75], &Led[74], &Led[73], &Led[72], &Led[71], &Led[70],
-	&Led[69], &Led[68], &Led[67], &Led[66], &Led[65], &Led[64], &Led[63], &Led[62], &Led[61], &Led[60]
+/*0*/	&Led[119],&Led[118],&Led[117],&Led[116],&Led[115],&Led[114],&Led[113],&Led[112],&Led[111],&Led[110],
+/*10*/	&Led[109],&Led[108],&Led[107],&Led[106],&Led[105],&Led[104],&Led[103],&Led[102],&Led[101],&Led[100],
+/*20*/	&Led[99], &Led[98], &Led[97], &Led[96], &Led[95], &Led[94], &Led[93], &Led[92], &Led[91], &Led[90],
+/*30*/	&Led[89], &Led[88], &Led[87], &Led[86], &Led[85], &Led[84], &Led[83], &Led[82], &Led[81], &Led[80],
+/*40*/	&Led[79], &Led[78], &Led[77], &Led[76], &Led[75], &Led[74], &Led[73], &Led[72], &Led[71], &Led[70],
+/*50*/	&Led[69], &Led[68], &Led[67], &Led[66], &Led[65], &Led[64], &Led[63], &Led[62], &Led[61], &Led[60]
 };
 
 const TLedRgb* Line2Leds[] = {
-	&Led[179],&Led[178],&Led[177],&Led[176],&Led[175],&Led[174],&Led[173],&Led[172],&Led[171],&Led[170],
-	&Led[169],&Led[168],&Led[167],&Led[166],&Led[165],&Led[164],&Led[163],&Led[162],&Led[161],&Led[160],
-	&Led[159],&Led[158],&Led[157],&Led[156],&Led[155],&Led[154],&Led[153],&Led[152],&Led[151],&Led[150],
-	&Led[149],&Led[148],&Led[147],&Led[146],&Led[145],&Led[144],&Led[143],&Led[142],&Led[141],&Led[140],
-	&Led[139],&Led[138],&Led[137],&Led[136],&Led[135],&Led[134],&Led[133],&Led[132],&Led[131],&Led[130],
-	&Led[129],&Led[128],&Led[127],&Led[126],&Led[125],&Led[124],&Led[123],&Led[122],&Led[121],&Led[120]
+/*0*/	&Led[179],&Led[178],&Led[177],&Led[176],&Led[175],&Led[174],&Led[173],&Led[172],&Led[171],&Led[170],
+/*10*/	&Led[169],&Led[168],&Led[167],&Led[166],&Led[165],&Led[164],&Led[163],&Led[162],&Led[161],&Led[160],
+/*20*/	&Led[159],&Led[158],&Led[157],&Led[156],&Led[155],&Led[154],&Led[153],&Led[152],&Led[151],&Led[150],
+/*30*/	&Led[149],&Led[148],&Led[147],&Led[146],&Led[145],&Led[144],&Led[143],&Led[142],&Led[141],&Led[140],
+/*40*/	&Led[139],&Led[138],&Led[137],&Led[136],&Led[135],&Led[134],&Led[133],&Led[132],&Led[131],&Led[130],
+/*50*/	&Led[129],&Led[128],&Led[127],&Led[126],&Led[125],&Led[124],&Led[123],&Led[122],&Led[121],&Led[120]
 };
 
 const TLedRgb* Line3Leds[] = {
-	&Led[239],&Led[238],&Led[237],&Led[236],&Led[235],&Led[234],&Led[233],&Led[232],&Led[231],&Led[230],
-	&Led[229],&Led[228],&Led[227],&Led[226],&Led[225],&Led[224],&Led[223],&Led[222],&Led[221],&Led[220],
-	&Led[219],&Led[218],&Led[217],&Led[216],&Led[215],&Led[214],&Led[213],&Led[212],&Led[211],&Led[210],
-	&Led[209],&Led[208],&Led[207],&Led[206],&Led[205],&Led[204],&Led[203],&Led[202],&Led[201],&Led[200],
-	&Led[199],&Led[198],&Led[197],&Led[196],&Led[195],&Led[194],&Led[193],&Led[192],&Led[191],&Led[190],
-	&Led[189],&Led[188],&Led[187],&Led[186],&Led[185],&Led[184],&Led[183],&Led[182],&Led[181],&Led[180]
+/*0*/	&Led[239],&Led[238],&Led[237],&Led[236],&Led[235],&Led[234],&Led[233],&Led[232],&Led[231],&Led[230],
+/*10*/	&Led[229],&Led[228],&Led[227],&Led[226],&Led[225],&Led[224],&Led[223],&Led[222],&Led[221],&Led[220],
+/*20*/	&Led[219],&Led[218],&Led[217],&Led[216],&Led[215],&Led[214],&Led[213],&Led[212],&Led[211],&Led[210],
+/*30*/	&Led[209],&Led[208],&Led[207],&Led[206],&Led[205],&Led[204],&Led[203],&Led[202],&Led[201],&Led[200],
+/*40*/	&Led[199],&Led[198],&Led[197],&Led[196],&Led[195],&Led[194],&Led[193],&Led[192],&Led[191],&Led[190],
+/*50*/	&Led[189],&Led[188],&Led[187],&Led[186],&Led[185],&Led[184],&Led[183],&Led[182],&Led[181],&Led[180]
 
 };
 
 const TLedRgb* Line4Leds[] = {
-	&Led[299],&Led[298],&Led[297],&Led[296],&Led[295],&Led[294],&Led[293],&Led[292],&Led[291],&Led[290],
-	&Led[289],&Led[288],&Led[287],&Led[286],&Led[285],&Led[284],&Led[283],&Led[282],&Led[281],&Led[280],
-	&Led[279],&Led[278],&Led[277],&Led[276],&Led[275],&Led[274],&Led[273],&Led[272],&Led[271],&Led[270],
-	&Led[269],&Led[268],&Led[267],&Led[266],&Led[265],&Led[264],&Led[263],&Led[262],&Led[261],&Led[260],
-	&Led[259],&Led[258],&Led[257],&Led[256],&Led[255],&Led[254],&Led[253],&Led[252],&Led[251],&Led[150],
-	&Led[249],&Led[248],&Led[247],&Led[246],&Led[245],&Led[244],&Led[243],&Led[242],&Led[241],&Led[240]
+/*0*/	&Led[299],&Led[298],&Led[297],&Led[296],&Led[295],&Led[294],&Led[293],&Led[292],&Led[291],&Led[290],
+/*10*/	&Led[289],&Led[288],&Led[287],&Led[286],&Led[285],&Led[284],&Led[283],&Led[282],&Led[281],&Led[280],
+/*20*/	&Led[279],&Led[278],&Led[277],&Led[276],&Led[275],&Led[274],&Led[273],&Led[272],&Led[271],&Led[270],
+/*30*/	&Led[269],&Led[268],&Led[267],&Led[266],&Led[265],&Led[264],&Led[263],&Led[262],&Led[261],&Led[260],
+/*40*/	&Led[259],&Led[258],&Led[257],&Led[256],&Led[255],&Led[254],&Led[253],&Led[252],&Led[251],&Led[250],
+/*50*/	&Led[249],&Led[248],&Led[247],&Led[246],&Led[245],&Led[244],&Led[243],&Led[242],&Led[241],&Led[240]
 
 };
 
@@ -241,6 +241,10 @@ void TLedRgbLine::fvDropEffect()
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 #define CO_PI (3.141692f)
+#define CO_SIN_RASTER (CO_PI/20)
+
+
+
 void fvMainLed20ms()
 {
 	static uint16_t unTask = 0;
@@ -291,23 +295,23 @@ void fvMainLed20ms()
 			if(unPom > 1000)
 			{unPom = 0;}
 
-			fRadius += CO_PI/100;
+			fRadius += (2*CO_PI)/300;
 
 
 			int16_t nSin =  static_cast<int16_t>( fabs(sin(fRadius)) * 1000 );
 			Bargraf[0].fvSetNomralizedTo1000(nSin);
 
 
-			nSin = static_cast<int16_t>( fabs(sin(fRadius + (1* CO_PI/6) ) ) * 1000 );
+			nSin = static_cast<int16_t>( fabs(sin(fRadius + (1* CO_SIN_RASTER) ) ) * 1000 );
 			Bargraf[1].fvSetNomralizedTo1000(nSin);
 
-			nSin = static_cast<int16_t>( fabs(sin(fRadius + (2* CO_PI/6) ) ) * 1000 );
+			nSin = static_cast<int16_t>( fabs(sin(fRadius + (2* CO_SIN_RASTER) ) ) * 1000 );
 			Bargraf[2].fvSetNomralizedTo1000(nSin);
 
-			nSin = static_cast<int16_t>(fabs(sin(fRadius + (3* CO_PI/6) ) ) * 1000 );
+			nSin = static_cast<int16_t>(fabs(sin(fRadius + (3* CO_SIN_RASTER) ) ) * 1000 );
 			Bargraf[3].fvSetNomralizedTo1000(nSin);
 
-			nSin = static_cast<int16_t>( fabs(sin(fRadius + (4* CO_PI/6) ) ) * 1000 );
+			nSin = static_cast<int16_t>( fabs(sin(fRadius + (4* CO_SIN_RASTER) ) ) * 1000 );
 			Bargraf[4].fvSetNomralizedTo1000(nSin);
 
 
@@ -322,39 +326,36 @@ void fvMainLed20ms()
 			if(unPom > 1000)
 			{unPom = 0;}
 
-			fRadius += CO_PI/200;
+			fRadius += (2*CO_PI)/200;
 
 
 
 			int16_t nSin;
 
-/*
+
 			nSin =  static_cast<int16_t>( fabs(sin(fRadius)) * 1000 );
 			BargrafHalfUp[0].fvSetNomralizedTo1000(nSin);
 			BargrafHalfDown[0].fvSetNomralizedTo1000(nSin);
 
-			nSin = static_cast<int16_t>( fabs(sin(fRadius + (1* CO_PI/6) ) ) * 1000 );
+			nSin = static_cast<int16_t>( fabs(sin(fRadius + (1* CO_SIN_RASTER) ) ) * 1000 );
 			BargrafHalfUp[1].fvSetNomralizedTo1000(nSin);
 			BargrafHalfDown[1].fvSetNomralizedTo1000(nSin);
 
-*/
 
-			nSin = static_cast<int16_t>( fabs(sin(fRadius + (2* CO_PI/6) ) ) * 1000 );
+			nSin = static_cast<int16_t>( fabs(sin(fRadius + (2* CO_SIN_RASTER) ) ) * 1000 );//>>
 			BargrafHalfUp[2].fvSetNomralizedTo1000(nSin);
 			BargrafHalfDown[2].fvSetNomralizedTo1000(nSin);
 
-/*
 
-			nSin = static_cast<int16_t>(fabs(sin(fRadius + (3* CO_PI/6) ) ) * 1000 );
+
+			nSin = static_cast<int16_t>(fabs(sin(fRadius + (3* CO_SIN_RASTER) ) ) * 1000 );
 			BargrafHalfUp[3].fvSetNomralizedTo1000(nSin);
 			BargrafHalfDown[3].fvSetNomralizedTo1000(nSin);
 
 
-			nSin = static_cast<int16_t>( fabs(sin(fRadius + (4* CO_PI/6) ) ) * 1000 );
+			nSin = static_cast<int16_t>( fabs(sin(fRadius + (4* CO_SIN_RASTER) ) ) * 1000 );
 			BargrafHalfUp[4].fvSetNomralizedTo1000(nSin);
 			BargrafHalfDown[4].fvSetNomralizedTo1000(nSin);
-*/
-
 
 
 
