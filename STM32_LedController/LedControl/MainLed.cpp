@@ -17,6 +17,9 @@ TRandomGenerator RandomGen{0x9832};
 //-----------------------------------------------------------------------------------------------------------------------------
 enum {EN_LED_MODE_ZERO,EN_LED_MODE_DROP};
 
+
+enum t_openargs {CO_OPEN_ARG_RESTART,CO_OPEN_ARG_PUT,CO_OPEN_ARG_MOVE};
+
 class TLedRgbLine : public TLedRgbSection
 {
 private:
@@ -25,14 +28,18 @@ public:
 	TLedRgbLine(const TLedRgb* pLedTabInp, uint16_t unLedTabLenghtInp): TLedRgbSection(pLedTabInp,unLedTabLenghtInp) {}
 	TLedRgbLine(const TLedRgb** ppLedTabInp, uint16_t unLedTabLenghtInp): TLedRgbSection(ppLedTabInp,unLedTabLenghtInp) {}
 
-	void fvMoveDown(uint16_t unStep);
+
+	void fvMoveDown(uint16_t unStep, uint16_t unLedStart = 0 ,uint16_t unLedStop = 0xffff);
 
 	void fvDropEffect();
+
+	void fvSnowEffect(t_openargs openArg);
 
 	uint16_t unTask;
 	uint16_t unMode;
 	uint16_t unDelay;
 	uint16_t unSecDelay;
+	uint16_t unLevelDown;
 };
 //-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -125,14 +132,21 @@ TBargraf BargrafHalfDown[CO_NUMB_OF_LED_LINES] = {
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
-void TLedRgbLine::fvMoveDown(uint16_t unStep)
+void TLedRgbLine::fvMoveDown(uint16_t unStep, uint16_t unLedStart,uint16_t unLedStop)
 {
 
-	for(uint16_t unLedIdx = 0; unLedIdx < unLedTabLenght; unLedIdx++)
+	if(unLedStop >= unLedTabLenght)
+	{unLedStop = unLedTabLenght - 1;}
+
+	if(unLedStart >= unLedTabLenght)
+	{unLedStart = unLedTabLenght - 1;}
+
+
+	for(uint16_t unLedIdx = unLedStart; unLedIdx <= unLedStop; unLedIdx++)
 	{
 		uint16_t unBuf = unLedIdx + unStep;
 
-		if(unBuf >= unLedTabLenght)
+		if(unBuf >= unLedStop + 1)
 		{
 			SetBrigtness(unLedIdx,0);
 		}
@@ -198,7 +212,7 @@ void TLedRgbLine::fvDropEffect()
 		case 2:
 		{
 
-			SetBrigtness(unLedTabLenght - 1,10);
+			SetBrigtness(unLedTabLenght - 1,10); //TODO: dodac zmianna jasnosci
 			unTask = 3;
 		}break;
 
@@ -220,7 +234,7 @@ void TLedRgbLine::fvDropEffect()
 		case 5:
 		{
 
-			SetBrigtness(unLedTabLenght - 1,1 *3);
+			SetBrigtness(unLedTabLenght - 1, 10);
 			unTask = 6;
 		}break;
 
@@ -237,6 +251,62 @@ void TLedRgbLine::fvDropEffect()
 
 }
 
+
+void TLedRgbLine::fvSnowEffect(t_openargs openArg)
+{
+
+/*
+	if(unMode != EN_LED_MODE_DROP)
+	{
+		unMode = EN_LED_MODE_DROP;
+		unTask = 0;
+		unDelay = 0;
+	}
+*/
+
+
+	switch(openArg)
+	{
+		case CO_OPEN_ARG_RESTART:
+		{
+			SetBrigtness(0, unLedTabLenght - 1, 0); //wygas wszystkie
+			unLevelDown = 0;
+		}break;
+
+		case CO_OPEN_ARG_PUT:
+		{
+			SetBrigtness(unLedTabLenght - 1,10); //TODO: dodac zmianna jasnosci
+
+		}break;
+
+		case CO_OPEN_ARG_MOVE:
+		{
+
+			fvMoveDown(1, unLevelDown, unLedTabLenght - 1);
+			if(getBrightness(unLevelDown) != 0)
+			{
+				unLevelDown++;
+			}
+
+/*
+			if(unDelay)
+			{
+				unDelay--;
+				return;
+			}
+			else
+			{
+				fvMoveDown(1);
+				unDelay = 0;
+			}
+*/
+
+
+		}break;
+
+	}
+
+}
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -263,12 +333,12 @@ void fvMainLed20ms()
 				LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
 				LedLine[unLineIdx].SetSaturation(0,CO_NUMB_LEDS_IN_LINE,100);
 
-				LedLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,5);
+				LedLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,15);
 
 				LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,/*300*/ 75 * unLineIdx);
 			}
 
-			unTask = 3;
+			unTask = 4;
 
 
 
@@ -362,6 +432,83 @@ void fvMainLed20ms()
 		}break;
 
 
+		case 4:
+		{
+			static uint16_t unPom = 0;
+
+
+			unPom++;
+			if(unPom > 3000)
+			{
+				unPom = 0;
+			}
+
+			if(unPom == 0)
+			{
+			   LedLine[0].fvSnowEffect(CO_OPEN_ARG_RESTART);
+			   LedLine[1].fvSnowEffect(CO_OPEN_ARG_RESTART);
+			   LedLine[2].fvSnowEffect(CO_OPEN_ARG_RESTART);
+			   LedLine[3].fvSnowEffect(CO_OPEN_ARG_RESTART);
+			   LedLine[4].fvSnowEffect(CO_OPEN_ARG_RESTART);
+
+			}
+
+
+
+			if(unPom % 50 == 0)
+			{
+				LedLine[0].fvSnowEffect(CO_OPEN_ARG_PUT);
+			}
+			else
+			{
+				LedLine[0].fvSnowEffect(CO_OPEN_ARG_MOVE);
+			}
+
+
+			if(unPom % 50 == 10)
+			{
+				LedLine[1].fvSnowEffect(CO_OPEN_ARG_PUT);
+			}
+			else
+			{
+				LedLine[1].fvSnowEffect(CO_OPEN_ARG_MOVE);
+			}
+
+
+			if(unPom % 50 == 30)
+			{
+				LedLine[2].fvSnowEffect(CO_OPEN_ARG_PUT);
+			}
+			else
+			{
+				LedLine[2].fvSnowEffect(CO_OPEN_ARG_MOVE);
+			}
+
+			if(unPom % 50 == 40)
+			{
+				LedLine[3].fvSnowEffect(CO_OPEN_ARG_PUT);
+			}
+			else
+			{
+				LedLine[3].fvSnowEffect(CO_OPEN_ARG_MOVE);
+			}
+
+			if(unPom % 50 == 15)
+			{
+				LedLine[4].fvSnowEffect(CO_OPEN_ARG_PUT);
+			}
+			else
+			{
+				LedLine[4].fvSnowEffect(CO_OPEN_ARG_MOVE);
+			}
+
+
+
+
+
+		}break;
+
+
 
 	}
 
@@ -378,80 +525,4 @@ void fvMainLed20ms()
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------------------------------------------
-void fvMainLed20ms_1()
-{
-	static uint16_t unTask = 0;
-	static uint16_t unLedNo = 0;
-
-
-	switch(unTask)
-	{
-
-		case 0:
-		{
-			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
-			{
-
-				for (uint16_t unLedIdx = 0; unLedIdx < CO_NUMB_LEDS_IN_LINE; unLedIdx++)
-				{
-					LedLine[unLineIdx].SetHue(unLedIdx,unLineIdx * 20);
-					LedLine[unLineIdx].SetSaturation(unLedIdx,100);
-					LedLine[unLineIdx].fvEnable(unLedIdx);
-				}
-				LedLine[unLineIdx].Refresh();
-
-
-
-			}
-
-			unTask = 1;
-
-		}break;
-
-		case 1:
-		{
-
-		for(uint16_t j = 0; j < 4; j++)
-		{
-			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
-			{
-				LedLine[unLineIdx].SetBrigtness(unLedNo,5);
-				LedLine[unLineIdx].Refresh();
-			}
-
-			unLedNo++;
-			if(unLedNo >= CO_NUMB_LEDS_IN_LINE)
-			{
-				unLedNo = 0;
-				unTask = 2;
-				break;
-			}
-		}
-
-		}break;
-
-
-		case 2:
-		{
-			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
-			{
-				LedLine[unLineIdx].SetBrigtness(unLedNo,0);
-				LedLine[unLineIdx].Refresh();
-			}
-
-			unLedNo++;
-			if(unLedNo >= CO_NUMB_LEDS_IN_LINE)
-			{
-				unLedNo = 0;
-				unTask = 1;
-			}
-		}break;
-
-	}
-
-
-
-}
-
 
