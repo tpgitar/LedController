@@ -338,7 +338,7 @@ void fvMainLed20ms()
 				LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,/*300*/ 75 * unLineIdx);
 			}
 
-			unTask = 4;
+			unTask = 2;
 
 
 
@@ -360,29 +360,36 @@ void fvMainLed20ms()
 		{
 			static uint16_t unPom = 0;
 			static float fRadius = 0;
+			static uint16_t unPom2 = 0;
 
 			unPom++;
 			if(unPom > 1000)
 			{unPom = 0;}
 
-			fRadius += (2*CO_PI)/300;
+			if(unPom % 2 == 0)
+			{
+				fRadius += (2*CO_PI)/100;
+			}
+
+			int16_t nSin;
 
 
-			int16_t nSin =  static_cast<int16_t>( fabs(sin(fRadius)) * 1000 );
-			Bargraf[0].fvSetNomralizedTo1000(nSin);
+			nSin =  static_cast<int16_t>( fabs(sin(fRadius)) * 1000 );
+			Bargraf[0].fvBargrafEffect(nSin);
 
 
 			nSin = static_cast<int16_t>( fabs(sin(fRadius + (1* CO_SIN_RASTER) ) ) * 1000 );
-			Bargraf[1].fvSetNomralizedTo1000(nSin);
+			Bargraf[1].fvBargrafEffect(nSin);
 
 			nSin = static_cast<int16_t>( fabs(sin(fRadius + (2* CO_SIN_RASTER) ) ) * 1000 );
-			Bargraf[2].fvSetNomralizedTo1000(nSin);
+			Bargraf[2].fvBargrafEffect(nSin);
 
 			nSin = static_cast<int16_t>(fabs(sin(fRadius + (3* CO_SIN_RASTER) ) ) * 1000 );
-			Bargraf[3].fvSetNomralizedTo1000(nSin);
+			Bargraf[3].fvBargrafEffect(nSin);
+
 
 			nSin = static_cast<int16_t>( fabs(sin(fRadius + (4* CO_SIN_RASTER) ) ) * 1000 );
-			Bargraf[4].fvSetNomralizedTo1000(nSin);
+			Bargraf[4].fvBargrafEffect(nSin);
 
 
 		}break;

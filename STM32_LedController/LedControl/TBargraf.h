@@ -24,6 +24,9 @@ private:
 	uint16_t unBackgroundHue;
 	uint8_t unBackgroundBrightness;
 
+	uint16_t unMaxLedNumb;
+	uint16_t unDelay;
+
 public:
 
 	TBargraf(const TLedRgb* pLedTabInp, uint16_t unLedTabLenghtInp): TLedRgbSection(pLedTabInp,unLedTabLenghtInp) {}
@@ -32,7 +35,7 @@ public:
 	void fvSetNomralizedTo1000(uint16_t unNormValue);
 
 
-	void fvBargrafEffect();
+	void fvBargrafEffect(uint16_t unNormValue);
 
 
 };
