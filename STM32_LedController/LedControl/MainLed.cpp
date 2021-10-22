@@ -283,7 +283,7 @@ void TLedRgbLine::fvSnowEffect(t_openargs openArg)
 		{
 
 			fvMoveDown(1, unLevelDown, unLedTabLenght - 1);
-			if(getBrightness(unLevelDown) != 0)
+			while(getBrightness(unLevelDown) != 0)
 			{
 				unLevelDown++;
 			}
@@ -333,12 +333,12 @@ void fvMainLed20ms()
 				LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
 				LedLine[unLineIdx].SetSaturation(0,CO_NUMB_LEDS_IN_LINE,100);
 
-				LedLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,15);
+				LedLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,0);
 
 				LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,/*300*/ 75 * unLineIdx);
 			}
 
-			unTask = 2;
+			unTask = 5;
 
 
 
@@ -507,6 +507,68 @@ void fvMainLed20ms()
 			else
 			{
 				LedLine[4].fvSnowEffect(CO_OPEN_ARG_MOVE);
+			}
+
+
+		}break;
+
+		case 5:
+		{
+			static int16_t nLineIdx = (CO_NUMB_OF_LED_LINES - 1) * (-1);
+			static int16_t unLedIdx = 0;
+			static int16_t nDirection = 1;
+
+			static uint16_t unPom = 0;
+
+
+			unPom++;
+			if(unPom > 2)
+			{
+				unPom = 0;
+			}
+			else
+			{break;}
+
+
+
+			if(nLineIdx >= CO_NUMB_OF_LED_LINES)
+			{
+				nDirection = -1;
+			}
+
+			if(nLineIdx < 0)
+			{
+				nDirection = 1;
+			}
+
+			nLineIdx += nDirection;
+
+
+			if(nLineIdx == 0)
+			{
+				unLedIdx++;
+				if(unLedIdx > CO_NUMB_LEDS_IN_LINE)
+				{
+					unLedIdx = 0;
+					for(int16_t k = 0; k < CO_NUMB_OF_LED_LINES ; k++)
+					{
+						LedLine[k].fvSnowEffect(CO_OPEN_ARG_RESTART);
+					}
+				}
+			}
+
+
+
+			for(int16_t k = 0; k < CO_NUMB_OF_LED_LINES ; k++)
+			{
+				if(nLineIdx == k)
+				{
+					LedLine[k].fvSnowEffect(CO_OPEN_ARG_MOVE);
+					LedLine[k].fvSnowEffect(CO_OPEN_ARG_PUT);
+				}
+				else
+				{LedLine[k].fvSnowEffect(CO_OPEN_ARG_MOVE);}
+
 			}
 
 
