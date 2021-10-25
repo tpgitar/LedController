@@ -5,6 +5,7 @@
 #include "./LedRgb.h"
 #include "./LedSection.h"
 #include "./TBargraf.h"
+#include "./TLedRgbLine.h"
 #include "./Random.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -14,35 +15,9 @@
 
 class TLedRgb Led[CO_WS2812_NUMB_OF_LEDS];
 TRandomGenerator RandomGen{0x9832};
+
+#define CO_BRIGHTNESS_LIMIT_MAX 10
 //-----------------------------------------------------------------------------------------------------------------------------
-enum {EN_LED_MODE_ZERO,EN_LED_MODE_DROP};
-
-
-enum t_openargs {CO_OPEN_ARG_RESTART,CO_OPEN_ARG_PUT,CO_OPEN_ARG_MOVE};
-
-class TLedRgbLine : public TLedRgbSection
-{
-private:
-
-public:
-	TLedRgbLine(const TLedRgb* pLedTabInp, uint16_t unLedTabLenghtInp): TLedRgbSection(pLedTabInp,unLedTabLenghtInp) {}
-	TLedRgbLine(const TLedRgb** ppLedTabInp, uint16_t unLedTabLenghtInp): TLedRgbSection(ppLedTabInp,unLedTabLenghtInp) {}
-
-
-	void fvMoveDown(uint16_t unStep, uint16_t unLedStart = 0 ,uint16_t unLedStop = 0xffff);
-
-	void fvDropEffect();
-
-	void fvSnowEffect(t_openargs openArg);
-
-	uint16_t unTask;
-	uint16_t unMode;
-	uint16_t unDelay;
-	uint16_t unSecDelay;
-	uint16_t unLevelDown;
-};
-//-----------------------------------------------------------------------------------------------------------------------------------
-
 const TLedRgb* Line0Leds[] = {
 /*0*/	&Led[59], &Led[58], &Led[57], &Led[56], &Led[55], &Led[54], &Led[53], &Led[52], &Led[51], &Led[50],
 /*10*/	&Led[49], &Led[48], &Led[47], &Led[46], &Led[45], &Led[44], &Led[43], &Led[42], &Led[41], &Led[40],
@@ -51,7 +26,6 @@ const TLedRgb* Line0Leds[] = {
 /*40*/	&Led[19], &Led[18], &Led[17], &Led[16], &Led[15], &Led[14], &Led[13], &Led[12], &Led[11], &Led[10],
 /*50*/	&Led[9],  &Led[8],  &Led[7] , &Led[6] , &Led[5] , &Led[4] , &Led[3],  &Led[2],  &Led[1],  &Led[0]
 };
-
 
 const TLedRgb* Line1Leds[] = {
 /*0*/	&Led[119],&Led[118],&Led[117],&Led[116],&Led[115],&Led[114],&Led[113],&Led[112],&Led[111],&Led[110],
@@ -91,229 +65,44 @@ const TLedRgb* Line4Leds[] = {
 
 };
 
-
 //-------------------------
 class TLedRgbLine LedLine[CO_NUMB_OF_LED_LINES] = {
-	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE),
-	TLedRgbLine(Line1Leds, CO_NUMB_LEDS_IN_LINE),//TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE),
-	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 2], CO_NUMB_LEDS_IN_LINE),
-	TLedRgbLine(Line3Leds, CO_NUMB_LEDS_IN_LINE),//TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE),
-	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE)
+	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
+	TLedRgbLine(Line1Leds, CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),//TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE),
+	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 2], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
+	TLedRgbLine(Line3Leds, CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),//TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE),
+	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX)
 };
 //-------------------------
-
 class TBargraf Bargraf[CO_NUMB_OF_LED_LINES] = {
 
-	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE),
-	TBargraf(Line1Leds, CO_NUMB_LEDS_IN_LINE),	//TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE),
-	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 2], CO_NUMB_LEDS_IN_LINE),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
+	TBargraf(Line1Leds, CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),	//TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 2], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
 	TBargraf(Line3Leds, CO_NUMB_LEDS_IN_LINE),//TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE),
-	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE)
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX)
 };
 //-------------------------
 TBargraf BargrafHalfUp[CO_NUMB_OF_LED_LINES] = {
-		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 0 + 30],30),
+		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 0 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
 		TBargraf(&Line1Leds[30],30),
-		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 2 + 30],30),
+		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 2 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
 		TBargraf(&Line3Leds[30],30),
-		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 4 + 30],30),
+		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 4 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
 };
 
 
 TBargraf BargrafHalfDown[CO_NUMB_OF_LED_LINES] = {
-		TBargraf(&Line0Leds[30],30),
-		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1 + 30],30),
-		TBargraf(&Line2Leds[30],30),
-		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 3 + 30],30),
-		TBargraf(&Line4Leds[30],30)
+		TBargraf(&Line0Leds[30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Line2Leds[30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 3 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Line4Leds[30],30, CO_BRIGHTNESS_LIMIT_MAX)
 };
-
-
-
-
-//---------------------------------------------------------------------------------------------------------------------------------------------------
-void TLedRgbLine::fvMoveDown(uint16_t unStep, uint16_t unLedStart,uint16_t unLedStop)
-{
-
-	if(unLedStop >= unLedTabLenght)
-	{unLedStop = unLedTabLenght - 1;}
-
-	if(unLedStart >= unLedTabLenght)
-	{unLedStart = unLedTabLenght - 1;}
-
-
-	for(uint16_t unLedIdx = unLedStart; unLedIdx <= unLedStop; unLedIdx++)
-	{
-		uint16_t unBuf = unLedIdx + unStep;
-
-		if(unBuf >= unLedStop + 1)
-		{
-			SetBrigtness(unLedIdx,0);
-		}
-		else
-		{
-			SetBrigtness(unLedIdx,getBrightness(unBuf));
-		}
-
-	}
-}
-
-
-
-
-//---------------------------------------------------------------------------------------------------------------------------------------------------
-void TLedRgbLine::fvDropEffect()
-{
-
-
-	if(unMode != EN_LED_MODE_DROP)
-	{
-		unMode = EN_LED_MODE_DROP;
-		unTask = 0;
-		unDelay = 0;
-	}
-
-
-	if(unDelay)
-	{
-		unDelay--;
-		return;
-	}
-	else
-	{
-		fvMoveDown(1);
-		unDelay = 0;
-
-	}
-
-
-	switch(unTask)
-	{
-		case 0:
-		{
-
-			SetBrigtness(0, unLedTabLenght - 1, 0); //wygas wszystkie
-			unTask = 1;
-
-		}break;
-
-		case 1:
-		{
-			SetBrigtness(unLedTabLenght - 1,10);
-
-			//unSecDelay =   rand() %  (4 * CO_DISP_FREQ) ;
-
-			unSecDelay = RandomGen.funGetRandomValue(60, 180);
-
-
-			unTask = 2;
-		}break;
-
-		case 2:
-		{
-
-			SetBrigtness(unLedTabLenght - 1,10); //TODO: dodac zmianna jasnosci
-			unTask = 3;
-		}break;
-
-		case 3:
-		{
-
-			SetBrigtness(unLedTabLenght - 1,10);
-			unTask = 4;
-		}break;
-
-		case 4:
-		{
-
-			SetBrigtness(unLedTabLenght - 1,10);
-			unTask = 5;
-		}break;
-
-
-		case 5:
-		{
-
-			SetBrigtness(unLedTabLenght - 1, 10);
-			unTask = 6;
-		}break;
-
-		default:
-		{
-			unTask++;
-			if(unTask > unSecDelay)
-			{unTask = 1;}
-		}break;
-
-		//rand
-
-	}
-
-}
-
-
-void TLedRgbLine::fvSnowEffect(t_openargs openArg)
-{
-
-/*
-	if(unMode != EN_LED_MODE_DROP)
-	{
-		unMode = EN_LED_MODE_DROP;
-		unTask = 0;
-		unDelay = 0;
-	}
-*/
-
-
-	switch(openArg)
-	{
-		case CO_OPEN_ARG_RESTART:
-		{
-			SetBrigtness(0, unLedTabLenght - 1, 0); //wygas wszystkie
-			unLevelDown = 0;
-		}break;
-
-		case CO_OPEN_ARG_PUT:
-		{
-			SetBrigtness(unLedTabLenght - 1,10); //TODO: dodac zmianna jasnosci
-
-		}break;
-
-		case CO_OPEN_ARG_MOVE:
-		{
-
-			fvMoveDown(1, unLevelDown, unLedTabLenght - 1);
-			while(getBrightness(unLevelDown) != 0)
-			{
-				unLevelDown++;
-			}
-
-/*
-			if(unDelay)
-			{
-				unDelay--;
-				return;
-			}
-			else
-			{
-				fvMoveDown(1);
-				unDelay = 0;
-			}
-*/
-
-
-		}break;
-
-	}
-
-}
-
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 #define CO_PI (3.141692f)
 #define CO_SIN_RASTER (CO_PI/20)
-
-
 
 void fvMainLed20ms()
 {
@@ -327,7 +116,6 @@ void fvMainLed20ms()
 
 		case 0:
 		{
-
 			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
 			{
 				LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
@@ -338,9 +126,7 @@ void fvMainLed20ms()
 				LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,/*300*/ 75 * unLineIdx);
 			}
 
-			unTask = 5;
-
-
+			unTask = 1;
 
 		}break;
 

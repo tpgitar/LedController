@@ -23,12 +23,18 @@ class TLedRgbSection
 protected:
 	const  uint16_t unLedTabLenght;
 
+	uint16_t unBrightnessLimitMax;
 
 
 
  public:
- 	TLedRgbSection(const TLedRgb* pLedTabInp, uint16_t unLedTabLenghtInp): pLedTab(pLedTabInp), ppLedTab(NULL), unLedTabLenght(unLedTabLenghtInp)  {};
- 	TLedRgbSection(const TLedRgb** ppLedTabInp, uint16_t unLedTabLenghtInp): pLedTab(NULL), ppLedTab(ppLedTabInp), unLedTabLenght(unLedTabLenghtInp) {};
+ 	TLedRgbSection(const TLedRgb* pLedTabInp, uint16_t unLedTabLenghtInp, uint16_t unBrightnessLimitMaxInp = 100 ): pLedTab(pLedTabInp), ppLedTab(NULL),
+ 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	 	  unLedTabLenght(unLedTabLenghtInp),
+																												 unBrightnessLimitMax(unBrightnessLimitMaxInp)  {};
+
+ 	TLedRgbSection(const TLedRgb** ppLedTabInp, uint16_t unLedTabLenghtInp, uint16_t unBrightnessLimitMaxInp = 100 ): pLedTab(NULL), ppLedTab(ppLedTabInp),
+ 																													  unLedTabLenght(unLedTabLenghtInp),
+																													  unBrightnessLimitMax(unBrightnessLimitMaxInp)  {};
 
 
  	TLedRgb* GetLedPtr(uint16_t unLedNo);

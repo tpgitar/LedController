@@ -29,8 +29,8 @@ private:
 
 public:
 
-	TBargraf(const TLedRgb* pLedTabInp, uint16_t unLedTabLenghtInp): TLedRgbSection(pLedTabInp,unLedTabLenghtInp) {}
-	TBargraf(const TLedRgb** ppLedTabInp, uint16_t unLedTabLenghtInp): TLedRgbSection(ppLedTabInp,unLedTabLenghtInp) {}
+	TBargraf(const TLedRgb* pLedTabInp, uint16_t unLedTabLenghtInp, uint16_t unBrightnessLimitMaxInp = 100 ): TLedRgbSection(pLedTabInp,unLedTabLenghtInp,unBrightnessLimitMaxInp) {}
+	TBargraf(const TLedRgb** ppLedTabInp, uint16_t unLedTabLenghtInp, uint16_t unBrightnessLimitMaxInp = 100 ): TLedRgbSection(ppLedTabInp,unLedTabLenghtInp,unBrightnessLimitMaxInp) {}
 
 	void fvSetNomralizedTo1000(uint16_t unNormValue);
 
