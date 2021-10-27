@@ -185,7 +185,7 @@ void TLedRgbSection::SetBrigtness(uint16_t unLedNo, uint8_t ucBright)
 	else
 	{pLed->ucBrightness = CO_ucMaxBrightness;}
 
-	pLed->Refresh();
+	//pLed->Refresh();
 
 }
 

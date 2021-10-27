@@ -7,6 +7,7 @@
 #include "./TBargraf.h"
 #include "./TLedRgbLine.h"
 #include "./Random.h"
+#include "Interpol.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
 #define CO_NUMB_OF_LED_LINES 5
@@ -15,6 +16,8 @@
 
 class TLedRgb Led[CO_WS2812_NUMB_OF_LEDS];
 TRandomGenerator RandomGen{0x9832};
+
+class TinterpolBiline ColorMatrix(0,4,0,59);
 
 #define CO_BRIGHTNESS_LIMIT_MAX 10
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -116,6 +119,10 @@ void fvMainLed20ms()
 
 		case 0:
 		{
+
+
+
+
 			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
 			{
 				LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
@@ -123,10 +130,12 @@ void fvMainLed20ms()
 
 				LedLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,0);
 
-				LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,/*300*/ 75 * unLineIdx);
+				LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
 			}
 
-			unTask = 1;
+			ColorMatrix.setColors(360,0,0,360); //LD LG PD PG
+
+			unTask = 6;
 
 		}break;
 
@@ -364,10 +373,55 @@ void fvMainLed20ms()
 		}break;
 
 
+		case 6:
+		{
+			static uint16_t unDelay = 0;
+
+
+			if(unDelay)
+			{
+				unDelay--;
+				break;
+			}
+
+			unDelay = 200;
+
+			//ColorMatrix.setColors(360,0,0,360); //LD LG PD PG
+			ColorMatrix.setColors(RandomGen.funGetRandomValue(0,360),
+									RandomGen.funGetRandomValue(0,360),
+									RandomGen.funGetRandomValue(0,360),
+									RandomGen.funGetRandomValue(0,360));
+
+
+
+			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+			{
+				LedLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,10);
+				for(uint16_t unLedIdx = 0; unLedIdx < CO_NUMB_LEDS_IN_LINE; unLedIdx++)
+				{
+					LedLine[unLineIdx].SetHue(unLedIdx,ColorMatrix.getPointValue(unLineIdx,unLedIdx));
+				}
+			}
+
+
+		}break;
+
+
+		case 7:
+		{
+			//ColorMatrix.getPointValue(unLineIdx,unLedIdx)
+
+		}break
+
 
 	}
 
 	LedLine[0].Refresh();
+	LedLine[1].Refresh();
+	LedLine[2].Refresh();
+	LedLine[3].Refresh();
+	LedLine[4].Refresh();
+
 }
 
 
