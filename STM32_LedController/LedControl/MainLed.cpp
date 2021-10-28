@@ -8,6 +8,7 @@
 #include "./TLedRgbLine.h"
 #include "./Random.h"
 #include "Interpol.h"
+#include "colors.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
 #define CO_NUMB_OF_LED_LINES 5
@@ -133,10 +134,9 @@ void fvMainLed20ms()
 				LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
 			}
 
-			ColorMatrix.setColors(360,0,0,360); //LD LG PD PG
+			ColorMatrix.setColors(RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor()); //LD LG PD PG
 
-			unTask = 6;
-
+			unTask = 5;
 		}break;
 
 		case 1:
@@ -193,6 +193,15 @@ void fvMainLed20ms()
 		{
 			static uint16_t unPom = 0;
 			static float fRadius = 0;
+			static uint16_t unTime = 0;
+
+
+			unTime++;
+			if(unTime > 500)
+			{
+				unTime = 0;
+				unTask = 6;
+			}
 
 			unPom++;
 			if(unPom > 1000)
@@ -384,13 +393,13 @@ void fvMainLed20ms()
 				break;
 			}
 
-			unDelay = 200;
+			//unDelay = 200;
 
 			//ColorMatrix.setColors(360,0,0,360); //LD LG PD PG
-			ColorMatrix.setColors(RandomGen.funGetRandomValue(0,360),
-									RandomGen.funGetRandomValue(0,360),
-									RandomGen.funGetRandomValue(0,360),
-									RandomGen.funGetRandomValue(0,360));
+			ColorMatrix.setColors(RandomGen.funGetRandomColor(),
+									RandomGen.funGetRandomColor(),
+									RandomGen.funGetRandomColor(),
+									RandomGen.funGetRandomColor());
 
 
 
@@ -403,15 +412,45 @@ void fvMainLed20ms()
 				}
 			}
 
+			unTask = 3;
 
 		}break;
 
 
 		case 7:
 		{
+			static uint16_t un_Color = 0;
+
+			static uint16_t unDelay = 0;
+			static uint16_t unIdx = 0;
+
+
+			unDelay++;
+			if(unDelay < 10)
+			{
+				break;
+			}
+			unDelay = 0;
+			un_Color += 1;
+			un_Color %= 360;
+
 			//ColorMatrix.getPointValue(unLineIdx,unLedIdx)
 
-		}break
+			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+			{
+				LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
+				LedLine[unLineIdx].SetSaturation(0,CO_NUMB_LEDS_IN_LINE,100);
+				LedLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,10);
+				LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,ColorTab[unIdx]);
+			}
+
+
+
+			unIdx++;
+			unIdx %= funGetSizeofColorTab();
+
+
+		}break;
 
 
 	}

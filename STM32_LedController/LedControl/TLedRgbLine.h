@@ -34,6 +34,7 @@ public:
 	uint16_t unMode;
 	uint16_t unDelay;
 	uint16_t unSecDelay;
+	uint16_t unColor;
 	uint16_t unLevelDown;
 };
 

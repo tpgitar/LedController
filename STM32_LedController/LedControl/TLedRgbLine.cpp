@@ -29,10 +29,12 @@ void TLedRgbLine::fvMoveDown(uint16_t unStep, uint16_t unLedStart,uint16_t unLed
 		if(unBuf >= unLedStop + 1)
 		{
 			SetBrigtness(unLedIdx,0);
+			SetHue(unLedIdx,0);
 		}
 		else
 		{
 			SetBrigtness(unLedIdx,getBrightness(unBuf));
+			SetHue(unLedIdx,getHue(unBuf));
 		}
 
 	}
@@ -67,6 +69,7 @@ void TLedRgbLine::fvDropEffect()
 	}
 
 
+
 	switch(unTask)
 	{
 		case 0:
@@ -79,11 +82,11 @@ void TLedRgbLine::fvDropEffect()
 
 		case 1:
 		{
+			unColor = RandomGen.funGetRandomColor();
 			SetBrigtness(unLedTabLenght - 1,unBrightnessLimitMax);
+			SetHue(unLedTabLenght - 1,unColor);
 
-			//unSecDelay =   rand() %  (4 * CO_DISP_FREQ) ;
-
-			unSecDelay = RandomGen.funGetRandomValue(60, 180);
+			unSecDelay = RandomGen.funGetRandomValue(50, 170);
 
 
 			unTask = 2;
@@ -92,7 +95,8 @@ void TLedRgbLine::fvDropEffect()
 		case 2:
 		{
 
-			SetBrigtness(unLedTabLenght - 1,unBrightnessLimitMax); //TODO: dodac zmianna jasnosci
+			SetBrigtness(unLedTabLenght - 1,unBrightnessLimitMax);
+			SetHue(unLedTabLenght - 1,unColor);
 			unTask = 3;
 		}break;
 
@@ -100,6 +104,7 @@ void TLedRgbLine::fvDropEffect()
 		{
 
 			SetBrigtness(unLedTabLenght - 1,unBrightnessLimitMax);
+			SetHue(unLedTabLenght - 1,unColor);
 			unTask = 4;
 		}break;
 
@@ -107,6 +112,7 @@ void TLedRgbLine::fvDropEffect()
 		{
 
 			SetBrigtness(unLedTabLenght - 1,unBrightnessLimitMax);
+			SetHue(unLedTabLenght - 1,unColor);
 			unTask = 5;
 		}break;
 
@@ -115,6 +121,7 @@ void TLedRgbLine::fvDropEffect()
 		{
 
 			SetBrigtness(unLedTabLenght - 1, unBrightnessLimitMax);
+			SetHue(unLedTabLenght - 1,unColor);
 			unTask = 6;
 		}break;
 
@@ -156,6 +163,7 @@ void TLedRgbLine::fvSnowEffect(t_openargs openArg)
 		case CO_OPEN_ARG_PUT:
 		{
 			SetBrigtness(unLedTabLenght - 1,unBrightnessLimitMax);
+			//SetHue(unLedTabLenght - 1, RandomGen.funGetRandomColor() );
 
 		}break;
 

@@ -6,6 +6,7 @@
  */
 
 #include "./Random.h"
+#include "colors.h"
 
 
 
@@ -25,4 +26,13 @@ uint16_t TRandomGenerator::funGetRandomValue(uint16_t unMin,uint16_t unMax)
 	uint16_t unRet =  (abs(nRandom) % (unMax - unMin)) + unMin;
 
 	return unRet;
+}
+
+
+uint16_t TRandomGenerator::funGetRandomColor()
+{
+
+	uint16_t unIdx = funGetRandomValue(0,funGetSizeofColorTab() );
+
+	return ColorTab[unIdx];
 }
