@@ -11,6 +11,9 @@
 #include "colors.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------
+void fnSetMatrixColors(TLedRgbLine* pLine,TinterpolBiline* pColorMatrix);
+void fnColorTransformation();
+//-----------------------------------------------------------------------------------------------------------------------------
 #define CO_NUMB_OF_LED_LINES 5
 #define CO_NUMB_LEDS_IN_LINE 60
 #define CO_DISP_FREQ 50 //20ms
@@ -129,14 +132,15 @@ void fvMainLed20ms()
 				LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
 				LedLine[unLineIdx].SetSaturation(0,CO_NUMB_LEDS_IN_LINE,100);
 
-				LedLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,0);
+				LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,0);
 
 				LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
 			}
 
-			ColorMatrix.setColors(RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor()); //LD LG PD PG
 
-			unTask = 5;
+			ColorMatrix.setCornersColors(RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor()); //LD LG PD PG
+
+			unTask = 8;
 		}break;
 
 		case 1:
@@ -261,6 +265,12 @@ void fvMainLed20ms()
 			   LedLine[2].fvSnowEffect(CO_OPEN_ARG_RESTART);
 			   LedLine[3].fvSnowEffect(CO_OPEN_ARG_RESTART);
 			   LedLine[4].fvSnowEffect(CO_OPEN_ARG_RESTART);
+
+			   uint16_t Color = RandomGen.funGetRandomColor();
+
+			   LedLine[4].SetHue(0,59,Color);
+
+			   //ColorMatrix.setColors(Color,Color,Color,Color); //LD LG PD PG*/
 
 			}
 
@@ -396,7 +406,7 @@ void fvMainLed20ms()
 			//unDelay = 200;
 
 			//ColorMatrix.setColors(360,0,0,360); //LD LG PD PG
-			ColorMatrix.setColors(RandomGen.funGetRandomColor(),
+			ColorMatrix.setCornersColors(RandomGen.funGetRandomColor(),
 									RandomGen.funGetRandomColor(),
 									RandomGen.funGetRandomColor(),
 									RandomGen.funGetRandomColor());
@@ -405,7 +415,7 @@ void fvMainLed20ms()
 
 			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
 			{
-				LedLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,10);
+				LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,10);
 				for(uint16_t unLedIdx = 0; unLedIdx < CO_NUMB_LEDS_IN_LINE; unLedIdx++)
 				{
 					LedLine[unLineIdx].SetHue(unLedIdx,ColorMatrix.getPointValue(unLineIdx,unLedIdx));
@@ -440,7 +450,7 @@ void fvMainLed20ms()
 			{
 				LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
 				LedLine[unLineIdx].SetSaturation(0,CO_NUMB_LEDS_IN_LINE,100);
-				LedLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,10);
+				LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,10);
 				LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,ColorTab[unIdx]);
 			}
 
@@ -450,6 +460,11 @@ void fvMainLed20ms()
 			unIdx %= funGetSizeofColorTab();
 
 
+		}break;
+
+		case 8:
+		{
+			fnColorTransformation();
 		}break;
 
 
@@ -463,9 +478,94 @@ void fvMainLed20ms()
 
 }
 
+//---------------------------------------------------------------------------------------------------------------------------------------------------
+void fnSetMatrixColors(TLedRgbLine* pLine,TinterpolBiline* pColorMatrix)
+{
+	for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+	{
+		//pLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,10);
+		for(uint16_t unLedIdx = 0; unLedIdx < CO_NUMB_LEDS_IN_LINE; unLedIdx++)
+		{
+			pLine[unLineIdx].SetHue(unLedIdx,pColorMatrix->getPointValue(unLineIdx,unLedIdx));
+		}
+	}
+
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------
+
+void fnColorTransformation()
+{
+	static uint16_t ColorDest_LD = 0;
+	static uint16_t ColorDest_LG = 0;
+	static uint16_t ColorDest_PD = 0;
+	static uint16_t ColorDest_PG = 0;
+
+	static uint16_t unTask = 0;
+	static uint16_t unTimer = 0;
+
+	switch(unTask)
+	{
+		case 0:
+		{
+			switch(RandomGen.funGetRandomValue(0,3))
+			{
+				case 0:
+				{
+					//ColorDest_LD = RandomGen.funGetRandomValue(0,360);
+					ColorDest_LD = RandomGen.funGetRandomColor();
+				}break;
+
+				case 1:
+				{
+					//ColorDest_LG = RandomGen.funGetRandomValue(0,360);
+					ColorDest_LG = RandomGen.funGetRandomColor();
+				}break;
+
+				case 2:
+				{
+					//ColorDest_PD = RandomGen.funGetRandomValue(0,360);
+					ColorDest_PD = RandomGen.funGetRandomColor();
+				}break;
+
+				case 3:
+				{
+					//ColorDest_PG = RandomGen.funGetRandomValue(0,360);
+					ColorDest_PG = RandomGen.funGetRandomColor();
+				}break;
+			}
+
+			unTask = 1;
+
+			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+			{
+				LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,10);
+			}
+
+		}break;
+
+		case 1:
+		{
+			if(ColorMatrix.fvAjustCornerLinear(ColorDest_LD,ColorDest_LG,ColorDest_PD,ColorDest_PG) == 0)
+			{unTask = 2;}
+
+			fnSetMatrixColors(&LedLine[0],&ColorMatrix);
+
+			unTimer = 50 * 3;
+		}break;
 
 
+		case 2:
+		{//wait
 
+			if(unTimer)
+			{unTimer--;}
+			else
+			{unTask = 0;}
+		}break;
+
+	}
+}
 
 
 

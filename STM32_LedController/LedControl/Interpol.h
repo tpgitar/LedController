@@ -36,8 +36,13 @@ public:
 	uint16_t getPointValue(const uint16_t x,const uint16_t y) const;
 	uint16_t getPointValue(const uint16_t x, const uint16_t y, const uint16_t inpQ11,const uint16_t inpQ12, const uint16_t inpQ21, const uint16_t inpQ22) const;
 
-	void setColors(const uint16_t inpQ11,const uint16_t inpQ12,
+	void setCornersColors(const uint16_t inpQ11,const uint16_t inpQ12,
 				   const uint16_t inpQ21,const uint16_t inpQ22);
+	//--------------------------
+	//to zrobic w klasie dziedziczacej
+
+	uint16_t fvAjustCornerLinear(uint16_t inpQ11,uint16_t inpQ12,uint16_t inpQ21,uint16_t inpQ22);
+
 
 
 };

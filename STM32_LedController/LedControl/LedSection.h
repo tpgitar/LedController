@@ -46,7 +46,7 @@ protected:
  	TLedRgb* getCurrentLedPtr();
 
  	void SetBrigtness(uint16_t unLedNo, uint8_t ucBright);
- 	void SetBrigtness(uint16_t unLedStart,uint16_t unLedStop, uint8_t ucBright);
+ 	void SetBrightness(uint16_t unLedStart,uint16_t unLedStop, uint8_t ucBright);
 
  	void IncreaseBrightness(uint16_t unLedNo, uint8_t ucBright);
  	void DecreaseBrightness(uint16_t unLedNo, uint8_t ucBright);

@@ -153,7 +153,7 @@ TLedRgb* TLedRgbSection::getCurrentLedPtr()
 
 
 //-----------------------------------------------------------------------------------------------------
-void TLedRgbSection::SetBrigtness(uint16_t unLedStart,uint16_t unLedStop, uint8_t ucBright)
+void TLedRgbSection::SetBrightness(uint16_t unLedStart,uint16_t unLedStop, uint8_t ucBright)
 {
 
 

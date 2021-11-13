@@ -75,7 +75,7 @@ void TLedRgbLine::fvDropEffect()
 		case 0:
 		{
 
-			SetBrigtness(0, unLedTabLenght - 1, 0); //wygas wszystkie
+			SetBrightness(0, unLedTabLenght - 1, 0); //wygas wszystkie
 			unTask = 1;
 
 		}break;
@@ -156,7 +156,7 @@ void TLedRgbLine::fvSnowEffect(t_openargs openArg)
 	{
 		case CO_OPEN_ARG_RESTART:
 		{
-			SetBrigtness(0, unLedTabLenght - 1, 0); //wygas wszystkie
+			SetBrightness(0, unLedTabLenght - 1, 0); //wygas wszystkie
 			unLevelDown = 0;
 		}break;
 

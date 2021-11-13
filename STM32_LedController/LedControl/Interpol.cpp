@@ -28,7 +28,7 @@ TinterpolBiline::TinterpolBiline(const uint16_t inpX1,const uint16_t inpX2,
 
 
 //---------------------------------------------------------------------------------------------------------------
-void TinterpolBiline::setColors(const uint16_t inpQ11,const uint16_t inpQ12,
+void TinterpolBiline::setCornersColors(const uint16_t inpQ11,const uint16_t inpQ12,
 				   const uint16_t inpQ21,const uint16_t inpQ22)
 {
 	q11 = inpQ11;
@@ -95,6 +95,64 @@ uint16_t TinterpolBiline::getPointValue(const uint16_t x,const  uint16_t y) cons
 }
 //---------------------------------------------------------------------------------------------------------------
 
+
+
+uint16_t TinterpolBiline::fvAjustCornerLinear(uint16_t inpQ11,uint16_t inpQ12,uint16_t inpQ21,uint16_t inpQ22)
+{
+	uint16_t unRet = 0;
+
+	if(inpQ11 > q11)
+	{
+		q11++;
+		unRet++;
+	}
+
+	if(inpQ11 < q11)
+	{
+		q11--;
+		unRet++;
+	}
+	//--
+	if(inpQ12 > q12)
+	{
+		q12++;
+		unRet++;
+	}
+
+	if(inpQ12 < q12)
+	{
+		q12--;
+		unRet++;
+	}
+
+	//--
+	if(inpQ21 > q21)
+	{
+		q21++;
+		unRet++;
+	}
+
+	if(inpQ21 < q21)
+	{
+		q21--;
+		unRet++;
+	}
+
+	//--
+	if(inpQ22 > q22)
+	{
+		q22++;
+		unRet++;
+	}
+
+	if(inpQ22 < q22)
+	{
+		q22--;
+		unRet++;
+	}
+
+	return unRet;
+}
 
 
 
