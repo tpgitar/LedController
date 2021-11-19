@@ -38,6 +38,9 @@ public:
 
 	void setCornersColors(const uint16_t inpQ11,const uint16_t inpQ12,
 				   const uint16_t inpQ21,const uint16_t inpQ22);
+
+
+
 	//--------------------------
 	//to zrobic w klasie dziedziczacej
 

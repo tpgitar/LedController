@@ -132,14 +132,14 @@ void TLedRgbLine::fvDropEffect()
 			{unTask = 1;}
 		}break;
 
-		//rand
+
 
 	}
 
 }
 
 
-void TLedRgbLine::fvSnowEffect(t_openargs openArg)
+void TLedRgbLine::fvSnowEffect(t_openargs openArg, uint16_t unColor)
 {
 
 /*
@@ -163,18 +163,26 @@ void TLedRgbLine::fvSnowEffect(t_openargs openArg)
 		case CO_OPEN_ARG_PUT:
 		{
 			SetBrigtness(unLedTabLenght - 1,unBrightnessLimitMax);
-			//SetHue(unLedTabLenght - 1, RandomGen.funGetRandomColor() );
+			SetHue(unLedTabLenght - 1, unColor );
 
 		}break;
 
 		case CO_OPEN_ARG_MOVE:
 		{
 
-			fvMoveDown(1, unLevelDown, unLedTabLenght - 1);
-			while(getBrightness(unLevelDown) != 0)
+
+			if(unLevelDown < unLedTabLenght - 1)
 			{
-				unLevelDown++;
+
+				fvMoveDown(1, unLevelDown, unLedTabLenght - 1);
+				while(getBrightness(unLevelDown) != 0)
+				{
+					unLevelDown++;
+				}
+
+
 			}
+
 
 /*
 			if(unDelay)

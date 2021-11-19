@@ -10,7 +10,7 @@
 
 #include "./LedSection.h"
 
-enum {EN_LED_MODE_ZERO,EN_LED_MODE_DROP};
+enum {EN_LED_MODE_ZERO,EN_LED_MODE_DROP,EN_LED_MODE_END};
 
 
 enum t_openargs {CO_OPEN_ARG_RESTART,CO_OPEN_ARG_PUT,CO_OPEN_ARG_MOVE};
@@ -28,7 +28,7 @@ public:
 
 	void fvDropEffect();
 
-	void fvSnowEffect(t_openargs openArg);
+	void fvSnowEffect(t_openargs openArg, uint16_t unColor = 0);
 
 	uint16_t unTask;
 	uint16_t unMode;

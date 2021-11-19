@@ -12,7 +12,7 @@
 
 //-----------------------------------------------------------------------------------------------------------------------------
 void fnSetMatrixColors(TLedRgbLine* pLine,TinterpolBiline* pColorMatrix);
-void fnColorTransformation();
+void fnColorTransformation(uint16_t unDelaySec, bool bRestart);
 //-----------------------------------------------------------------------------------------------------------------------------
 #define CO_NUMB_OF_LED_LINES 5
 #define CO_NUMB_LEDS_IN_LINE 60
@@ -111,7 +111,322 @@ TBargraf BargrafHalfDown[CO_NUMB_OF_LED_LINES] = {
 #define CO_PI (3.141692f)
 #define CO_SIN_RASTER (CO_PI/20)
 
+struct def_led_statem_machine
+{
+	uint16_t unMainTask;
+	uint16_t unInternalTask;
+	uint16_t unMainTimer;
+
+
+
+};
+
+#define CO_TIMEOUT_CHANGE_MODE   (50*60) //10 sek for test  //(50*60*10) //10min
+
+struct def_led_statem_machine State;
+
+enum {EN_LED_EFFECT_RAIN=1,EN_LED_EFFECT_SIN_1HALF,EN_LED_EFFECT_SIN_2HALF,EN_LED_EFFECT_SNOW1,EN_LED_EFFECT_END};
+
+
+//----------------------------------------------------------------------------------
+void fvSetMatixColors()
+{
+	for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+	{
+
+		for(uint16_t unLedIdx = 0; unLedIdx < CO_NUMB_LEDS_IN_LINE; unLedIdx++)
+		{
+			LedLine[unLineIdx].SetHue(unLedIdx,ColorMatrix.getPointValue(unLineIdx,unLedIdx));
+		}
+	}
+}
+
+
+//----------------------------------------------------------------------------------
+void fvRainEffect()
+{
+	for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+	{
+		LedLine[unLineIdx].fvDropEffect();
+	}
+
+}
+//----------------------------------------------------------------------------------
+void fvSinus1HalfEffect()
+{
+	static uint16_t unPom = 0;
+	static float fRadius = 0;
+
+
+
+	if(State.unInternalTask == 0)
+	{//restart
+		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+		{
+			LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
+		}
+
+		State.unInternalTask = 1;
+	}
+	else
+	{
+
+
+		unPom++;
+		if(unPom > 1000)
+		{unPom = 0;}
+
+		if(unPom % 2 == 0)
+		{
+			fRadius += (2*CO_PI)/100;
+		}
+
+		int16_t nSin;
+
+
+		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+		{
+			nSin = static_cast<int16_t>( fabs(sin(fRadius + (unLineIdx * CO_SIN_RASTER) ) ) * 1000 );
+			Bargraf[unLineIdx].fvBargrafEffect(nSin);
+		}
+	}
+}
+
+//----------------------------------------------------------------------------------
+void fvSinus2HalfEffect()
+{
+
+//	static uint16_t unPom = 0;
+	static float fRadius = 0;
+	static uint16_t unTime = 0;
+
+
+	if(State.unInternalTask == 0)
+	{//restart
+/*
+		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+		{
+			LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,RandomGen.funGetRandomColor());
+		}
+*/
+		fnColorTransformation(10,true);
+
+		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+		{
+			LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,10);
+		}
+
+		State.unInternalTask = 1;
+
+	}
+
+	if(unTime)
+	{
+		unTime--;
+		return;
+	}
+	else
+	{unTime = 0;}
+
+
+	fnColorTransformation(10,false);
+
+	/*unTime++;
+	if(unTime > 500)
+	{
+		unTime = 0;
+	}
+*/
+/*
+	unPom++;
+	if(unPom > 1000)
+	{unPom = 0;}
+*/
+
+	fRadius += (2*CO_PI)/200;
+
+	int16_t nSin;
+
+	for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+	{
+		nSin = static_cast<int16_t>( fabs(sin(fRadius + (unLineIdx * CO_SIN_RASTER) ) ) * 1000 );
+		BargrafHalfUp[unLineIdx].fvSetNomralizedTo1000(nSin);
+		BargrafHalfDown[unLineIdx].fvSetNomralizedTo1000(nSin);
+	}
+
+
+}
+//--------------------------------------------------------------------------------------
+void fvSnowEffect1()
+{
+
+	static uint16_t unPom = 0;
+	static uint16_t Color = 0;
+
+
+
+	if (State.unInternalTask == 0)
+	{
+		unPom = 0;
+		State.unInternalTask = 1;
+	}
+
+
+
+
+	if(unPom == 0)
+	{
+		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+		{LedLine[unLineIdx].fvSnowEffect(CO_OPEN_ARG_RESTART);}
+
+		Color = RandomGen.funGetRandomColor();
+
+		//LedLine[4].SetHue(0,59,Color);
+	    //ColorMatrix.setCornersColors(Color,Color,Color,Color); //LD LG PD PG*/
+	    //fnSetMatrixColors(&LedLine[0],&ColorMatrix);
+
+		unPom = 3000;
+	}
+	else
+	{
+		unPom--;
+	}
+
+	if(unPom % 50 == 0)
+	{
+		LedLine[0].fvSnowEffect(CO_OPEN_ARG_PUT,Color);
+	}
+	else
+	{
+		LedLine[0].fvSnowEffect(CO_OPEN_ARG_MOVE);
+	}
+
+
+
+	if(unPom % 50 == 10)
+	{
+		LedLine[1].fvSnowEffect(CO_OPEN_ARG_PUT,Color);
+	}
+	else
+	{
+		LedLine[1].fvSnowEffect(CO_OPEN_ARG_MOVE);
+	}
+
+
+	if(unPom % 50 == 30)
+	{
+		LedLine[2].fvSnowEffect(CO_OPEN_ARG_PUT,Color);
+	}
+	else
+	{
+		LedLine[2].fvSnowEffect(CO_OPEN_ARG_MOVE);
+	}
+
+	if(unPom % 50 == 40)
+	{
+		LedLine[3].fvSnowEffect(CO_OPEN_ARG_PUT,Color);
+	}
+	else
+	{
+		LedLine[3].fvSnowEffect(CO_OPEN_ARG_MOVE);
+	}
+
+	if(unPom % 50 == 15)
+	{
+		LedLine[4].fvSnowEffect(CO_OPEN_ARG_PUT,Color);
+	}
+	else
+	{
+		LedLine[4].fvSnowEffect(CO_OPEN_ARG_MOVE);
+	}
+
+
+
+}
+
+
+//----------------------------------------------------------------------------------
 void fvMainLed20ms()
+{
+
+	 if(State.unMainTimer)
+	 {
+		 State.unMainTimer--;
+
+		 switch(State.unMainTask)
+		 {
+		 	 case EN_LED_MODE_DROP:
+		 	 {
+		 		 fvRainEffect();
+
+		 	 }break;
+
+
+		 	 case EN_LED_EFFECT_SIN_1HALF:
+			 {
+				 fvSinus1HalfEffect();
+			 }break;
+
+		 	 case EN_LED_EFFECT_SIN_2HALF:
+			 {
+				 fvSinus2HalfEffect();
+			 }break;
+
+		 	 case EN_LED_EFFECT_SNOW1:
+			 {
+				 fvSnowEffect1();
+			 }break;
+
+
+
+		 	 default:
+		 	 {
+		 		State.unMainTimer = 0;
+		 	 }break;
+		 }
+
+
+	 }
+	 else
+	 {
+		 State.unMainTimer = CO_TIMEOUT_CHANGE_MODE;
+
+		 State.unInternalTask = 0;
+		 //State.unMainTask = RandomGen.funGetRandomValue(1,EN_LED_EFFECT_END - 1);
+
+		 //--
+
+		 State.unMainTask++;
+		 if(State.unMainTask >= EN_LED_EFFECT_END)
+		 {
+			 State.unMainTask = 1;
+		 }
+
+		 //State.unMainTask = EN_LED_EFFECT_SNOW1;
+		 //--
+
+
+		 for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+		 {
+			LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
+			LedLine[unLineIdx].SetSaturation(0,CO_NUMB_LEDS_IN_LINE,100);
+			LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,0);
+		 }
+
+
+	 }
+
+	 for(uint16_t i = 0; i < CO_NUMB_OF_LED_LINES; i++)
+	 {
+		LedLine[i].Refresh();
+	 }
+
+
+}
+
+
+
+void fvMainLed20ms_2()
 {
 	static uint16_t unTask = 0;
 
@@ -140,11 +455,11 @@ void fvMainLed20ms()
 
 			ColorMatrix.setCornersColors(RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor(),RandomGen.funGetRandomColor()); //LD LG PD PG
 
-			unTask = 8;
+			unTask = 2;
 		}break;
 
 		case 1:
-		{
+		{//ok
 
 			LedLine[0].fvDropEffect();
 			LedLine[1].fvDropEffect();
@@ -156,7 +471,7 @@ void fvMainLed20ms()
 
 
 		case 2:
-		{
+		{//ok
 			static uint16_t unPom = 0;
 			static float fRadius = 0;
 			static uint16_t unPom2 = 0;
@@ -194,7 +509,7 @@ void fvMainLed20ms()
 		}break;
 
 		case 3:
-		{
+		{//ok
 			static uint16_t unPom = 0;
 			static float fRadius = 0;
 			static uint16_t unTime = 0;
@@ -464,7 +779,13 @@ void fvMainLed20ms()
 
 		case 8:
 		{
-			fnColorTransformation();
+			fnColorTransformation(3,false);
+
+			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+			{
+				LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,10);
+			}
+
 		}break;
 
 
@@ -483,7 +804,7 @@ void fnSetMatrixColors(TLedRgbLine* pLine,TinterpolBiline* pColorMatrix)
 {
 	for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
 	{
-		//pLine[unLineIdx].SetBrigtness(0,CO_NUMB_LEDS_IN_LINE,10);
+		//pLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,10);
 		for(uint16_t unLedIdx = 0; unLedIdx < CO_NUMB_LEDS_IN_LINE; unLedIdx++)
 		{
 			pLine[unLineIdx].SetHue(unLedIdx,pColorMatrix->getPointValue(unLineIdx,unLedIdx));
@@ -494,7 +815,7 @@ void fnSetMatrixColors(TLedRgbLine* pLine,TinterpolBiline* pColorMatrix)
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 
-void fnColorTransformation()
+void fnColorTransformation(uint16_t unDelaySec, bool bRestart)
 {
 	static uint16_t ColorDest_LD = 0;
 	static uint16_t ColorDest_LG = 0;
@@ -503,6 +824,13 @@ void fnColorTransformation()
 
 	static uint16_t unTask = 0;
 	static uint16_t unTimer = 0;
+
+
+	if(bRestart == true)
+	{
+		 unTask = 0;
+	}
+
 
 	switch(unTask)
 	{
@@ -537,21 +865,20 @@ void fnColorTransformation()
 
 			unTask = 1;
 
-			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
-			{
-				LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,10);
-			}
 
 		}break;
 
 		case 1:
 		{
 			if(ColorMatrix.fvAjustCornerLinear(ColorDest_LD,ColorDest_LG,ColorDest_PD,ColorDest_PG) == 0)
-			{unTask = 2;}
+			{
+				unTask = 2;
+				unTimer = 50 * unDelaySec;
+			}
 
 			fnSetMatrixColors(&LedLine[0],&ColorMatrix);
 
-			unTimer = 50 * 3;
+
 		}break;
 
 
