@@ -34,14 +34,37 @@ const TLedRgb* Line0Leds[] = {
 /*50*/	&Led[9],  &Led[8],  &Led[7] , &Led[6] , &Led[5] , &Led[4] , &Led[3],  &Led[2],  &Led[1],  &Led[0]
 };
 
+
+//----------------
+
 const TLedRgb* Line1Leds[] = {
-/*0*/	&Led[119],&Led[118],&Led[117],&Led[116],&Led[115],&Led[114],&Led[113],&Led[112],&Led[111],&Led[110],
-/*10*/	&Led[109],&Led[108],&Led[107],&Led[106],&Led[105],&Led[104],&Led[103],&Led[102],&Led[101],&Led[100],
-/*20*/	&Led[99], &Led[98], &Led[97], &Led[96], &Led[95], &Led[94], &Led[93], &Led[92], &Led[91], &Led[90],
-/*30*/	&Led[89], &Led[88], &Led[87], &Led[86], &Led[85], &Led[84], &Led[83], &Led[82], &Led[81], &Led[80],
-/*40*/	&Led[79], &Led[78], &Led[77], &Led[76], &Led[75], &Led[74], &Led[73], &Led[72], &Led[71], &Led[70],
-/*50*/	&Led[69], &Led[68], &Led[67], &Led[66], &Led[65], &Led[64], &Led[63], &Led[62], &Led[61], &Led[60]
+&Led[119],&Led[118],&Led[117],&Led[116],&Led[115],&Led[114],&Led[113],&Led[112],&Led[111],&Led[110],
+	&Led[109],&Led[108],&Led[107],&Led[106],&Led[105],&Led[104],&Led[103],&Led[102],&Led[101],&Led[100],
+	&Led[99], &Led[98], &Led[97], &Led[96], &Led[95], &Led[94], &Led[93], &Led[92], &Led[91], &Led[90],
+	&Led[89], &Led[88], &Led[87], &Led[86], &Led[85], &Led[84], &Led[83], &Led[82], &Led[81], &Led[80],
+	&Led[79], &Led[78], &Led[77], &Led[76], &Led[75], &Led[74], &Led[73], &Led[72], &Led[71], &Led[70],
+	&Led[69], &Led[68], &Led[67], &Led[66], &Led[65], &Led[64], &Led[63], &Led[62], &Led[61], &Led[60]
 };
+
+
+
+/*
+const TLedRgb* Line1Leds[] = {
+0	&Led[60],&Led[61],&Led[62],&Led[63],&Led[64],&Led[65],&Led[66],&Led[67],&Led[68],&Led[69],
+0	&Led[70],&Led[71],&Led[72],&Led[73],&Led[74],&Led[75],&Led[76],&Led[77],&Led[78],&Led[79],
+0	&Led[80],&Led[81],&Led[82],&Led[83],&Led[84],&Led[85],&Led[86],&Led[87],&Led[88],&Led[89],
+0	&Led[90],&Led[91],&Led[92],&Led[93],&Led[94],&Led[95],&Led[96],&Led[97],&Led[98],&Led[99],
+10	&Led[100],&Led[101],&Led[102],&Led[103],&Led[104],&Led[105],&Led[106],&Led[107],&Led[108],&Led[109],
+		&Led[110],&Led[111],&Led[112],&Led[113],&Led[114],&Led[115],&Led[116],&Led[117],&Led[118],&Led[119]
+};
+
+*/
+
+
+
+//----------------
+
+
 
 const TLedRgb* Line2Leds[] = {
 /*0*/	&Led[179],&Led[178],&Led[177],&Led[176],&Led[175],&Led[174],&Led[173],&Led[172],&Led[171],&Led[170],
@@ -52,15 +75,34 @@ const TLedRgb* Line2Leds[] = {
 /*50*/	&Led[129],&Led[128],&Led[127],&Led[126],&Led[125],&Led[124],&Led[123],&Led[122],&Led[121],&Led[120]
 };
 
+//---------------------------------
+
 const TLedRgb* Line3Leds[] = {
-/*0*/	&Led[239],&Led[238],&Led[237],&Led[236],&Led[235],&Led[234],&Led[233],&Led[232],&Led[231],&Led[230],
-/*10*/	&Led[229],&Led[228],&Led[227],&Led[226],&Led[225],&Led[224],&Led[223],&Led[222],&Led[221],&Led[220],
-/*20*/	&Led[219],&Led[218],&Led[217],&Led[216],&Led[215],&Led[214],&Led[213],&Led[212],&Led[211],&Led[210],
-/*30*/	&Led[209],&Led[208],&Led[207],&Led[206],&Led[205],&Led[204],&Led[203],&Led[202],&Led[201],&Led[200],
-/*40*/	&Led[199],&Led[198],&Led[197],&Led[196],&Led[195],&Led[194],&Led[193],&Led[192],&Led[191],&Led[190],
-/*50*/	&Led[189],&Led[188],&Led[187],&Led[186],&Led[185],&Led[184],&Led[183],&Led[182],&Led[181],&Led[180]
+&Led[239],&Led[238],&Led[237],&Led[236],&Led[235],&Led[234],&Led[233],&Led[232],&Led[231],&Led[230],
+	&Led[229],&Led[228],&Led[227],&Led[226],&Led[225],&Led[224],&Led[223],&Led[222],&Led[221],&Led[220],
+	&Led[219],&Led[218],&Led[217],&Led[216],&Led[215],&Led[214],&Led[213],&Led[212],&Led[211],&Led[210],
+	&Led[209],&Led[208],&Led[207],&Led[206],&Led[205],&Led[204],&Led[203],&Led[202],&Led[201],&Led[200],
+	&Led[199],&Led[198],&Led[197],&Led[196],&Led[195],&Led[194],&Led[193],&Led[192],&Led[191],&Led[190],
+	&Led[189],&Led[188],&Led[187],&Led[186],&Led[185],&Led[184],&Led[183],&Led[182],&Led[181],&Led[180]
 
 };
+
+/*
+
+const TLedRgb* Line3Leds[] = {
+		&Led[180],&Led[181],&Led[182],&Led[183],&Led[184],&Led[185],&Led[186],&Led[187],&Led[188],&Led[189],
+		&Led[190],&Led[191],&Led[192],&Led[193],&Led[194],&Led[195],&Led[196],&Led[197],&Led[198],&Led[199],
+		&Led[200],&Led[201],&Led[202],&Led[203],&Led[204],&Led[205],&Led[206],&Led[207],&Led[208],&Led[209],
+		&Led[210],&Led[211],&Led[212],&Led[213],&Led[214],&Led[215],&Led[216],&Led[217],&Led[218],&Led[219],
+		&Led[220],&Led[221],&Led[222],&Led[223],&Led[224],&Led[225],&Led[226],&Led[227],&Led[228],&Led[229],
+		&Led[230],&Led[231],&Led[232],&Led[233],&Led[234],&Led[235],&Led[236],&Led[237],&Led[238],&Led[239]
+};
+*/
+
+
+
+//---------------------------------
+
 
 const TLedRgb* Line4Leds[] = {
 /*0*/	&Led[299],&Led[298],&Led[297],&Led[296],&Led[295],&Led[294],&Led[293],&Led[292],&Led[291],&Led[290],
@@ -73,6 +115,7 @@ const TLedRgb* Line4Leds[] = {
 };
 
 //-------------------------
+/*
 class TLedRgbLine LedLine[CO_NUMB_OF_LED_LINES] = {
 	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
 	TLedRgbLine(Line1Leds, CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),//TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE),
@@ -80,16 +123,35 @@ class TLedRgbLine LedLine[CO_NUMB_OF_LED_LINES] = {
 	TLedRgbLine(Line3Leds, CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),//TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE),
 	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX)
 };
+*/
+
+class TLedRgbLine LedLine[CO_NUMB_OF_LED_LINES] = {
+	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
+	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
+	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 2], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
+	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
+	TLedRgbLine(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX)
+};
+
+
+
+
+
+
 //-------------------------
 class TBargraf Bargraf[CO_NUMB_OF_LED_LINES] = {
 
 	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
-	TBargraf(Line1Leds, CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),	//TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
 	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 2], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
-	TBargraf(Line3Leds, CO_NUMB_LEDS_IN_LINE),//TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
 	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX)
 };
+
+
+
 //-------------------------
+/*
 TBargraf BargrafHalfUp[CO_NUMB_OF_LED_LINES] = {
 		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 0 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
 		TBargraf(&Line1Leds[30],30),
@@ -97,7 +159,22 @@ TBargraf BargrafHalfUp[CO_NUMB_OF_LED_LINES] = {
 		TBargraf(&Line3Leds[30],30),
 		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 4 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
 };
+*/
 
+
+TBargraf BargrafHalfUp[CO_NUMB_OF_LED_LINES] = {
+		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 0 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 2 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 3 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 4 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
+};
+
+
+
+
+
+/*
 
 TBargraf BargrafHalfDown[CO_NUMB_OF_LED_LINES] = {
 		TBargraf(&Line0Leds[30],30, CO_BRIGHTNESS_LIMIT_MAX),
@@ -106,6 +183,19 @@ TBargraf BargrafHalfDown[CO_NUMB_OF_LED_LINES] = {
 		TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 3 + 30],30, CO_BRIGHTNESS_LIMIT_MAX),
 		TBargraf(&Line4Leds[30],30, CO_BRIGHTNESS_LIMIT_MAX)
 };
+
+*/
+
+
+TBargraf BargrafHalfDown[CO_NUMB_OF_LED_LINES] = {
+
+		TBargraf(&Line0Leds[30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Line1Leds[30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Line2Leds[30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Line3Leds[30],30, CO_BRIGHTNESS_LIMIT_MAX),
+		TBargraf(&Line4Leds[30],30, CO_BRIGHTNESS_LIMIT_MAX)
+};
+
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 #define CO_PI (3.141692f)
@@ -121,11 +211,11 @@ struct def_led_statem_machine
 
 };
 
-#define CO_TIMEOUT_CHANGE_MODE   (50*60) //10 sek for test  //(50*60*10) //10min
+#define CO_TIMEOUT_CHANGE_MODE   (50*60*10) //10 sek for test  //(50*60*10) //10min
 
 struct def_led_statem_machine State;
 
-enum {EN_LED_EFFECT_RAIN=1,EN_LED_EFFECT_SIN_1HALF,EN_LED_EFFECT_SIN_2HALF,EN_LED_EFFECT_SNOW1,EN_LED_EFFECT_END};
+enum {EN_LED_EFFECT_RAIN=1,EN_LED_EFFECT_SIN_1HALF,EN_LED_EFFECT_SNOW1,EN_LED_EFFECT_SIN_2HALF,EN_LED_EFFECT_END};
 
 
 //----------------------------------------------------------------------------------
@@ -402,7 +492,7 @@ void fvMainLed20ms()
 			 State.unMainTask = 1;
 		 }
 
-		 //State.unMainTask = EN_LED_EFFECT_SNOW1;
+		 //State.unMainTask = EN_LED_EFFECT_SIN_2HALF;
 		 //--
 
 
