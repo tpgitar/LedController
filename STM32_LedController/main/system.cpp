@@ -66,6 +66,11 @@ void  Tsystem::fvSetFlags1ms()
 //-----------------------------------------------
 char sBufUsb[1024];
 uint16_t unIdx = 0;
+
+extern void fvTEst();
+extern void TastADC(void);
+
+
 void Tsystem::fvScheduler()
 {
 	if(bFlag1ms)
@@ -102,7 +107,7 @@ void Tsystem::fvScheduler()
 		fvMainLed20ms();
 		fvRunDmaTransfer();
 
-
+		fvTEst();
 
 	}
 
@@ -112,7 +117,7 @@ void Tsystem::fvScheduler()
 	{
 
 		bFlag100ms = false;
-
+		//TastADC();
 
 
 /*
@@ -139,7 +144,7 @@ void Tsystem::fvScheduler()
 class Tsystem System;
 
 //---------------------------------------------------------------------------------------------------------------------------
-extern "C" void fvSysSetFlags(void) // tu jest extern "C", bo funkcja jest wywo³ywana z przerwania, ktore jest w pliku C
+extern "C" void fvSysSetFlags(void) // tu jest extern "C", bo funkcja jest wywoï¿½ywana z przerwania, ktore jest w pliku C
 {
 	System.fvSetFlags1ms();
 }
