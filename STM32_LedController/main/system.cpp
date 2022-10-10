@@ -4,6 +4,7 @@
 #include "usb_device.h"
 
 #include "../LedControl/LedRgb.h"
+#include "../aplDsp/dataAquisition.h"
 
 extern class TLedRgb Led[];
 
@@ -71,6 +72,8 @@ extern void fvTEst();
 extern void TastADC(void);
 
 
+extern dataAquisition DataAquisition;
+
 void Tsystem::fvScheduler()
 {
 	if(bFlag1ms)
@@ -96,6 +99,9 @@ void Tsystem::fvScheduler()
 		CDC_Transmit_FS((uint8_t*) sBufUsb,strlen(sBufUsb));
 		//------------------
 
+		uint16_t unDataLen;
+		DataAquisition.fpGetBufferRead(&unDataLen);
+		//zwalnianie bufora !!
 
 	}
 
