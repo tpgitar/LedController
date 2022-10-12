@@ -23,5 +23,8 @@ float32_t aFFT_Input_Q15[50];
 void fvTEst()
 {
 	arm_float_to_q15((float32_t *)&FFT_Input_Q15_f[0], (q15_t *)&aFFT_Input_Q15[0], FFT_Length*2);
+	//arm_rfft_fast_f32(S, p, pOut, 0)
 }
+
+
 

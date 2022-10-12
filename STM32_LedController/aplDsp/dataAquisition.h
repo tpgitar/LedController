@@ -66,6 +66,18 @@ public:
 
 	}
 
+	void fvReleaseBuf(uint16_t* pInpDataBuf)
+	{
+		if(pInpDataBuf == &aunAdcDmaBuf[0])
+		{
+			firstBufFull = false;
+		}
+
+		if(pInpDataBuf == &aunAdcDmaBuf[CO_FFT_BUF_LEN/2])
+		{
+			secondBufFull = false;
+		}
+	}
 
 
 	struct

@@ -5,11 +5,14 @@
 
 #include "../LedControl/LedRgb.h"
 #include "../aplDsp/dataAquisition.h"
+#include "../aplDsp/ProcessFft.h"
 
 extern class TLedRgb Led[];
 
 extern  void fvRunDmaTransfer();
 
+
+ProcessFft processFFT;
 
 
 //---------------------------------------------------------------------------------------------------------------------------
@@ -76,6 +79,21 @@ extern dataAquisition DataAquisition;
 
 void Tsystem::fvScheduler()
 {
+
+	uint16_t unDataLen;
+	uint16_t* pInpDataBuf = DataAquisition.fpGetBufferRead(&unDataLen);
+
+	if(pInpDataBuf != NULL)
+	{
+
+		processFFT.CalculateFft(pInpDataBuf, unDataLen);
+		DataAquisition.fvReleaseBuf(pInpDataBuf);
+	}
+
+
+
+
+
 	if(bFlag1ms)
 	{
 		bFlag1ms = false;
@@ -99,9 +117,7 @@ void Tsystem::fvScheduler()
 		CDC_Transmit_FS((uint8_t*) sBufUsb,strlen(sBufUsb));
 		//------------------
 
-		uint16_t unDataLen;
-		DataAquisition.fpGetBufferRead(&unDataLen);
-		//zwalnianie bufora !!
+
 
 	}
 
