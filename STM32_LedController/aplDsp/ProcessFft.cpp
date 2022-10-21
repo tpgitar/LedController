@@ -118,18 +118,18 @@ void ProcessFft::CalculateFft(uint16_t* punInpBuf, uint16_t unInpBufLen)
 											 )
 									  );
 
+/*
 		if(fBuf > 25000)
 		{afInpDataBufCopy[unIdx] = fBuf - 25000;}
 		else
 		{afInpDataBufCopy[unIdx] = 0;}
-
-
-		afInpDataBufCopy[unIdx] /= 10000;
-/*
-		if(afInpDataBufCopy[unIdx] < 1)
-		{afInpDataBufCopy[unIdx] = 0;}
 */
 
+		afInpDataBufCopy[unIdx] = fBuf;
+
+		//--------------
+/*
+		afInpDataBufCopy[unIdx] /= 10000;
 
 
 		if(afInpDataBufCopy[unIdx] != 0)
@@ -140,6 +140,20 @@ void ProcessFft::CalculateFft(uint16_t* punInpBuf, uint16_t unInpBufLen)
 
 		if(aunAbsLogModule[unIdx] > 1000)
 		{aunAbsLogModule[unIdx] = 1000;}
+*/
+
+		//--------------
+#define  CO_MAX_VAL_FFT (1500000)
+
+		 fBuf =  log10f( (afInpDataBufCopy[unIdx]/CO_MAX_VAL_FFT) * 100 ) ;
+		 fBuf *= 500;
+
+
+		 if(fBuf > 0)
+		 {aunAbsLogModule[unIdx] = (uint16_t) fBuf;}
+		 else
+		 {aunAbsLogModule[unIdx] = 0;}
+
 
 
 
