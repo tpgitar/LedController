@@ -8,7 +8,7 @@
 #ifndef DATAAQUISITION_H_
 #define DATAAQUISITION_H_
 
-const uint16_t CO_FFT_NUMB_OF_SAMPLE = 1024;
+const uint16_t CO_FFT_NUMB_OF_SAMPLE = (1024 * 2);
 const uint16_t CO_FFT_BUF_LEN  (2 * CO_FFT_NUMB_OF_SAMPLE);
 
 

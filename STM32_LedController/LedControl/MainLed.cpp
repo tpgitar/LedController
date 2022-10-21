@@ -9,6 +9,9 @@
 #include "./Random.h"
 #include "Interpol.h"
 #include "colors.h"
+#include "../aplDsp/ProcessFft.h"
+
+extern ProcessFft processFFT;
 
 //-----------------------------------------------------------------------------------------------------------------------------
 void fnSetMatrixColors(TLedRgbLine* pLine,TinterpolBiline* pColorMatrix);
@@ -211,7 +214,7 @@ struct def_led_statem_machine
 
 };
 
-#define CO_TIMEOUT_CHANGE_MODE   (50*60*10) //10 sek for test  //(50*60*10) //10min
+#define CO_TIMEOUT_CHANGE_MODE   (50*60*1) //10 sek for test  //(50*60*10) //10min
 
 struct def_led_statem_machine State;
 
@@ -435,9 +438,115 @@ void fvSnowEffect1()
 }
 
 
+
+void fvSpectrum()
+{
+	static uint16_t unPom = 0;
+	static float fRadius = 0;
+
+	static uint32_t ulSum[5];
+	static uint16_t unAverage[5];
+	static uint16_t unCnt;
+
+	static uint16_t unTim;
+
+	 unTim++;
+	// if( unTim % 3 != 0)
+	// {return;}
+
+
+	if(State.unInternalTask == 0)
+	{//restart
+		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+		{
+			LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
+		}
+
+		State.unInternalTask = 1;
+	}
+	else
+	{
+		/*-----------------
+#define CO_ILE_SR 5
+		if(unCnt < CO_ILE_SR)
+		{
+			unCnt++;
+			ulSum[0] += processFFT.fnGetValByFreq(100);
+			ulSum[1] += processFFT.fnGetValByFreq(1000);
+			ulSum[2] += processFFT.fnGetValByFreq(3000);
+			ulSum[3] += processFFT.fnGetValByFreq(7000);
+			ulSum[4] += processFFT.fnGetValByFreq(10000);
+		}
+		else
+		{
+			unCnt = 0;
+
+			for(uint16_t i = 0; i < CO_ILE_SR; i++)
+			{
+				unAverage[i] = ulSum[i]/CO_ILE_SR;
+
+				ulSum[i] = 0;
+			}
+
+		}
+
+		for(uint16_t i = 0; i < CO_ILE_SR; i++)
+		{
+			Bargraf[i].fvBargrafEffect(unAverage[i] *10);
+		}
+		*/
+
+		//-----------------
+
+/*
+
+		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreq(100) );
+
+		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreq(1000) );
+		Bargraf[2].fvBargrafEffect(processFFT.fnGetValByFreq(3000)  );
+		Bargraf[3].fvBargrafEffect(processFFT.fnGetValByFreq(7000)  );
+		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreq(10000) );
+
+*/
+
+
+/*
+
+
+		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreq(100) *10);
+		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreq(1000) *10);
+		Bargraf[2].fvBargrafEffect(processFFT.fnGetValByFreq(3000) *10);
+		Bargraf[3].fvBargrafEffect(processFFT.fnGetValByFreq(7000) *10);
+		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreq(10000) *10);
+
+
+*/
+
+		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreqRange(120,150));
+		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreqRange(500,1500));
+		Bargraf[2].fvBargrafEffect(processFFT.fnGetValByFreqRange(1500, 5000));
+		Bargraf[3].fvBargrafEffect(processFFT.fnGetValByFreqRange(5000,8000));
+		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreqRange(8000, 12000));
+
+
+
+
+
+
+
+	}
+}
+
+
+
 //----------------------------------------------------------------------------------
 void fvMainLed20ms()
 {
+
+
+
+	State.unMainTask = EN_LED_MODE_DROP;
+
 
 	 if(State.unMainTimer)
 	 {
@@ -447,7 +556,9 @@ void fvMainLed20ms()
 		 {
 		 	 case EN_LED_MODE_DROP:
 		 	 {
-		 		 fvRainEffect();
+
+		 		fvSpectrum();
+		 		 //fvRainEffect();
 
 		 	 }break;
 
