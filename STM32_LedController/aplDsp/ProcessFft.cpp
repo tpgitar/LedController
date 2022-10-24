@@ -144,8 +144,9 @@ void ProcessFft::CalculateFft(uint16_t* punInpBuf, uint16_t unInpBufLen)
 
 		//--------------
 #define  CO_MAX_VAL_FFT (1500000)
+#define CO_IL_ELM_SR (3)
 
-		 fBuf =  log10f( (afInpDataBufCopy[unIdx]/CO_MAX_VAL_FFT) * 100 ) ;
+		 fBuf =  log10f( (afInpDataBufCopy[unIdx]/CO_MAX_VAL_FFT) * 150 ) + 0.4;
 		 fBuf *= 500;
 
 
@@ -182,9 +183,21 @@ void ProcessFft::CalculateFft(uint16_t* punInpBuf, uint16_t unInpBufLen)
 
 		}
 
+		//-----------------------------------
+		aunSumCzesc[unIdx] += aunAbsLogModule[unIdx];
+		aunSumCzesc[unIdx] -= aunAbsLogModuleAverage[unIdx];
+		aunAbsLogModuleAverage[unIdx] = aunSumCzesc[unIdx]/CO_IL_ELM_SR;
+		//-----------------------------------
+
+
 		unIdx++;
 	}
 	Stat.unFFTSkladStala = aunAbsLogModule[0];
+
+
+
+
+
 
 }
 
@@ -253,5 +266,15 @@ int16_t ProcessFft::fnGetValByFreqRange(uint16_t unFreqMin, uint16_t unFreqMax)
 
 }
 
-
 //--------------------------------------------------------------------------
+
+uint16_t ProcessFft::fnGetValByFreq_Average(uint16_t unFreq)
+{
+
+	uint16_t unIdx = unFreq/(24000/(CO_PROCESS_FFT_INP_BUF/2));
+
+	return aunAbsLogModuleAverage[unIdx];
+
+}
+
+

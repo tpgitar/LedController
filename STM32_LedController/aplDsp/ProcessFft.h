@@ -24,6 +24,9 @@ private:
 	void ConvIntToFloat(uint16_t* pInp,uint16_t unDataLen);
 
 
+	uint32_t aunSumCzesc[CO_PROCESS_FFT_INP_BUF/2];
+	uint32_t aunAbsLogModuleAverage[CO_PROCESS_FFT_INP_BUF/2];
+
 
 
 public:
@@ -33,6 +36,8 @@ public:
 	uint16_t fnGetValByFreq(uint16_t unFreq);
 	int16_t fnGetValByFreqRange(uint16_t unFreqMin, uint16_t unFreqMax);
 	void fvSignalStatistics(uint16_t* punInpBuf, uint16_t unInpBufLen);
+	uint16_t fnGetValByFreq_Average(uint16_t unFreq);
+
 
 	struct
 	{

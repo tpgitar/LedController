@@ -510,17 +510,26 @@ void fvSpectrum()
 */
 
 
+
 /*
 
-
-		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreq(100) *10);
-		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreq(1000) *10);
-		Bargraf[2].fvBargrafEffect(processFFT.fnGetValByFreq(3000) *10);
-		Bargraf[3].fvBargrafEffect(processFFT.fnGetValByFreq(7000) *10);
-		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreq(10000) *10);
-
+		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreq(100)   );
+		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreq(1000)  );
+		Bargraf[2].fvBargrafEffect(processFFT.fnGetValByFreq(3000)  );
+		Bargraf[3].fvBargrafEffect(processFFT.fnGetValByFreq(7000)  );
+		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreq(10000) );
 
 */
+/*
+		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreq_Average(100)   );
+		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreq_Average(1000)  );
+		Bargraf[2].fvBargrafEffect(processFFT.fnGetValByFreq_Average(3000)  );
+		Bargraf[3].fvBargrafEffect(processFFT.fnGetValByFreq_Average(7000)  );
+		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreq_Average(10000) );
+*/
+
+
+
 
 		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreqRange(120,150));
 		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreqRange(500,1500));
