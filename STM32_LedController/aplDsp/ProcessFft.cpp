@@ -30,31 +30,9 @@ void ProcessFft::ConvIntToFloat(uint16_t* pInp,uint16_t unDataLen)
 	if(unDataLen > CO_PROCESS_FFT_INP_BUF)
 	{unDataLen = CO_PROCESS_FFT_INP_BUF;}
 
-//	float* pfOut = &afInpDataBuf[0];
-
-
 	for(uint16_t i = 0; i < unDataLen; i++)
 	{
-/*
-		if(pInp[i] > 50)
-		{afInpDataBuf[i] = pInp[i] - 50;}
-		else
-		{afInpDataBuf[i] = 0;}
-*/
-
-
 		afInpDataBuf[i] = pInp[i];
-
-
-
-
-/*
-
-		if(i < unDataLen/2)
-		{afInpDataBuf[i] = 1 pInp[i];}
-		else
-		{afInpDataBuf[i] = 0;}
-*/
 	}
 
 
@@ -266,6 +244,35 @@ int16_t ProcessFft::fnGetValByFreqRange(uint16_t unFreqMin, uint16_t unFreqMax)
 
 }
 
+
+
+//
+
+
+//wywolac w FFTBar i tam przeliczyć na skalę log
+float32_t ProcessFft::ffGetMaxValByFreqRange_Lin(uint16_t unFreqMin, uint16_t unFreqMax)
+{
+
+	uint16_t unIdxMin = unFreqMin/(24000/(CO_PROCESS_FFT_INP_BUF/2));
+	uint16_t unIdxMax = unFreqMax/(24000/(CO_PROCESS_FFT_INP_BUF/2));
+
+	float32_t  fRetVal = 0;
+
+
+	for (uint16_t i = unIdxMin; i <= unIdxMax; i++)
+	{
+		if(fRetVal < afInpDataBufCopy[i])
+		{fRetVal = afInpDataBufCopy[i];}
+
+
+
+	}
+
+	return fRetVal;
+
+}
+
+
 //--------------------------------------------------------------------------
 
 uint16_t ProcessFft::fnGetValByFreq_Average(uint16_t unFreq)
@@ -276,5 +283,8 @@ uint16_t ProcessFft::fnGetValByFreq_Average(uint16_t unFreq)
 	return aunAbsLogModuleAverage[unIdx];
 
 }
+
+
+
 
 

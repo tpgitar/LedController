@@ -9,11 +9,12 @@
 
 //namespace std {
 
-
+//--------------------------------------------------------------------------------------------------------------
 void TBargraf::fvBargrafEffect(uint16_t unNormValue)
 {
 
 	uint16_t unActivLedNumb = (static_cast<uint32_t>(unNormValue) * unLedTabLenght)/1000;
+
 
 	if(unDelay)
 	{unDelay--;}
@@ -21,13 +22,14 @@ void TBargraf::fvBargrafEffect(uint16_t unNormValue)
 	{
 		if(unMaxLedNumb)
 		{unMaxLedNumb--;}
-		unDelay = 1;
+		unDelay = unCfgDelay;
 	}
+
 
 	if(unActivLedNumb > unMaxLedNumb)
 	{
 		unMaxLedNumb = unActivLedNumb;
-		unDelay = 2;
+		unDelay = unCfgPreDelay;
 	}
 
 
@@ -44,21 +46,8 @@ void TBargraf::fvBargrafEffect(uint16_t unNormValue)
 		}
 	}
 	SetBrigtness(unMaxLedNumb,10);
-
-/*
-	if(unMaxLedNumb > 60)
-	{unMaxLedNumb = 0;}
-
-	SetBrigtness(unMaxLedNumb,0);
-
-	unMaxLedNumb++;
-	unMaxLedNumb %= 60;
-
-	SetBrigtness(unMaxLedNumb,10);
-*/
-
 }
-
+//-----------------------------------------------------------------------------------------------------
 
 
 

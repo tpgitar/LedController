@@ -10,8 +10,29 @@
 #include "Interpol.h"
 #include "colors.h"
 #include "../aplDsp/ProcessFft.h"
+#include "../aplDsp/FftBar.h"
 
 extern ProcessFft processFFT;
+
+
+
+/*
+FftBar fftBar100Hz(&processFFT,120,150);
+FftBar fftBar1kHz(&processFFT,500,1500);
+FftBar fftBar3kHz(&processFFT,1500,5000);
+FftBar fftBar7kHz(&processFFT,5000,8000);
+FftBar fftBar10kHz(&processFFT,8000,12000);
+
+*/
+
+FftBar fftBar100Hz(&processFFT,120,150);
+FftBar fftBar1kHz(&processFFT,900,1100);
+FftBar fftBar3kHz(&processFFT,2700,3300);
+FftBar fftBar7kHz(&processFFT,6300,7700);
+FftBar fftBar10kHz(&processFFT,9000,11000);
+
+
+
 
 //-----------------------------------------------------------------------------------------------------------------------------
 void fnSetMatrixColors(TLedRgbLine* pLine,TinterpolBiline* pColorMatrix);
@@ -138,17 +159,18 @@ class TLedRgbLine LedLine[CO_NUMB_OF_LED_LINES] = {
 
 
 
-
+#define CO_MAX_PREDELAY 2
+#define CO_MAX_DELAY 2
 
 
 //-------------------------
 class TBargraf Bargraf[CO_NUMB_OF_LED_LINES] = {
 
-	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
-	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
-	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 2], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
-	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX),
-	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX)
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 0], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX, CO_MAX_PREDELAY, CO_MAX_DELAY),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 1], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX, CO_MAX_PREDELAY, CO_MAX_DELAY),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 2], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX, CO_MAX_PREDELAY, CO_MAX_DELAY),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 3], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX, CO_MAX_PREDELAY, CO_MAX_DELAY),
+	TBargraf(&Led[CO_NUMB_LEDS_IN_LINE * 4], CO_NUMB_LEDS_IN_LINE, CO_BRIGHTNESS_LIMIT_MAX, CO_MAX_PREDELAY, CO_MAX_DELAY)
 };
 
 
@@ -498,47 +520,22 @@ void fvSpectrum()
 
 		//-----------------
 
-/*
-
-		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreq(100) );
-
-		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreq(1000) );
-		Bargraf[2].fvBargrafEffect(processFFT.fnGetValByFreq(3000)  );
-		Bargraf[3].fvBargrafEffect(processFFT.fnGetValByFreq(7000)  );
-		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreq(10000) );
-
-*/
-
-
 
 /*
-
-		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreq(100)   );
-		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreq(1000)  );
-		Bargraf[2].fvBargrafEffect(processFFT.fnGetValByFreq(3000)  );
-		Bargraf[3].fvBargrafEffect(processFFT.fnGetValByFreq(7000)  );
-		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreq(10000) );
-
-*/
-/*
-		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreq_Average(100)   );
-		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreq_Average(1000)  );
-		Bargraf[2].fvBargrafEffect(processFFT.fnGetValByFreq_Average(3000)  );
-		Bargraf[3].fvBargrafEffect(processFFT.fnGetValByFreq_Average(7000)  );
-		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreq_Average(10000) );
-*/
-
-
-
 
 		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreqRange(120,150));
 		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreqRange(500,1500));
 		Bargraf[2].fvBargrafEffect(processFFT.fnGetValByFreqRange(1500, 5000));
 		Bargraf[3].fvBargrafEffect(processFFT.fnGetValByFreqRange(5000,8000));
 		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreqRange(8000, 12000));
+*/
 
 
-
+		Bargraf[0].fvBargrafEffect(fftBar100Hz.fnGetNormalizedVal());
+		Bargraf[1].fvBargrafEffect(fftBar1kHz.fnGetNormalizedVal());
+		Bargraf[2].fvBargrafEffect(fftBar3kHz.fnGetNormalizedVal());
+		Bargraf[3].fvBargrafEffect(fftBar7kHz.fnGetNormalizedVal());
+		Bargraf[4].fvBargrafEffect(fftBar10kHz.fnGetNormalizedVal());
 
 
 
