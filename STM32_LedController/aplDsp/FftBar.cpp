@@ -8,6 +8,20 @@
 #include "FftBar.h"
 
 
+//LowPassFilter::LowPassFilter(uint16_t unNumbOfElementsInp) : unNumbOfElements(unNumbOfElementsInp) {}
+
+uint16_t LowPassFilter::fnFilter(uint16_t unInpVal,uint16_t unNumbOfElements)
+{
+	ulSum += unInpVal;
+	ulSum -= unAverage;
+	unAverage = ulSum/unNumbOfElements;
+
+	return unAverage;
+}
+
+
+
+
 /*
 FftBar::FftBar()
 {
@@ -47,6 +61,9 @@ uint16_t FftBar::fnGetNormalizedVal()
 	{unRet = CO_NORMA_MAX;}
 
 
+	unRet = lowPassFilter_InpSign.fnFilter(unRet,4);
+
+
 	if( (unSlewRateRaise == 0) && (unSlewRateFall == 0) )
 	{
 		this->unNormalizedVal = unRet;
@@ -70,3 +87,6 @@ uint16_t FftBar::fnGetNormalizedVal()
 
 	return this->unNormalizedVal;
 }
+
+
+

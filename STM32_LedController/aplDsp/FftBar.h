@@ -11,6 +11,23 @@
 #include "ProcessFft.h"
 
 
+class LowPassFilter
+{
+private:
+	uint32_t ulSum;
+	//uint16_t unNumbOfElements;
+	uint16_t unAverage;
+
+public:
+	//LowPassFilter(uint16_t unNumbOfElementsInp);
+	uint16_t fnFilter(uint16_t unInpVal,uint16_t unNumbOfElements);
+
+};
+
+
+
+
+
 class FftBar
 {
 private:
@@ -24,13 +41,15 @@ private:
 
 
 public:
+
+	LowPassFilter lowPassFilter_InpSign;
 	FftBar(ProcessFft* pProcessFftInp = NULL,uint16_t unFreqMinInp = 0,uint16_t unFreqMaxInp = 20000):
 		unFreqMin(unFreqMinInp),
 		unFreqMax(unFreqMaxInp),
 		pProcessFft(pProcessFftInp)
 	{
 		unSlewRateRaise = 70;
-		unSlewRateFall = 70;
+		unSlewRateFall = 35;
 
 	};
 
