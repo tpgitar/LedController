@@ -25,11 +25,11 @@ FftBar fftBar10kHz(&processFFT,8000,12000);
 
 */
 
-FftBar fftBar100Hz(&processFFT,120,150);
+FftBar fftBar100Hz(&processFFT,110,130);
 FftBar fftBar1kHz(&processFFT,900,1100);
 FftBar fftBar3kHz(&processFFT,2700,3300);
 FftBar fftBar7kHz(&processFFT,6300,7700);
-FftBar fftBar10kHz(&processFFT,9000,11000);
+FftBar fftBar10kHz(&processFFT,8000,12000);
 
 
 
@@ -160,7 +160,7 @@ class TLedRgbLine LedLine[CO_NUMB_OF_LED_LINES] = {
 
 
 #define CO_MAX_PREDELAY 2
-#define CO_MAX_DELAY 2
+#define CO_MAX_DELAY 4
 
 
 //-------------------------

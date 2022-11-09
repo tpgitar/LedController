@@ -49,6 +49,13 @@ uint16_t FftBar::fnGetNormalizedVal()
 #define CO_IL_ELM_SR (3)
 #define CO_NORMA_MAX 1000
 
+	/*
+	 fBuf =  log10f( (afInpDataBufCopy[unIdx]/CO_MAX_VAL_FFT) * 150 ) + 0.4;
+			 fBuf *= 500;
+*/
+
+
+
 	fBuf =  log10f( (fBuf/CO_MAX_VAL_FFT) * 150 ) + 0.4;
 	fBuf *= 500;
 

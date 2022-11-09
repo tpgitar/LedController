@@ -96,31 +96,10 @@ void ProcessFft::CalculateFft(uint16_t* punInpBuf, uint16_t unInpBufLen)
 											 )
 									  );
 
-/*
-		if(fBuf > 25000)
-		{afInpDataBufCopy[unIdx] = fBuf - 25000;}
-		else
-		{afInpDataBufCopy[unIdx] = 0;}
-*/
+
 
 		afInpDataBufCopy[unIdx] = fBuf;
 
-		//--------------
-/*
-		afInpDataBufCopy[unIdx] /= 10000;
-
-
-		if(afInpDataBufCopy[unIdx] != 0)
-		{aunAbsLogModule[unIdx] = (uint16_t) ( 700 * (log10f(afInpDataBufCopy[unIdx])) );}
-		else
-		{aunAbsLogModule[unIdx] = 0;}
-
-
-		if(aunAbsLogModule[unIdx] > 1000)
-		{aunAbsLogModule[unIdx] = 1000;}
-*/
-
-		//--------------
 #define  CO_MAX_VAL_FFT (1500000)
 #define CO_IL_ELM_SR (3)
 
@@ -160,22 +139,9 @@ void ProcessFft::CalculateFft(uint16_t* punInpBuf, uint16_t unInpBufLen)
 
 
 		}
-
-		//-----------------------------------
-		aunSumCzesc[unIdx] += aunAbsLogModule[unIdx];
-		aunSumCzesc[unIdx] -= aunAbsLogModuleAverage[unIdx];
-		aunAbsLogModuleAverage[unIdx] = aunSumCzesc[unIdx]/CO_IL_ELM_SR;
-		//-----------------------------------
-
-
 		unIdx++;
 	}
 	Stat.unFFTSkladStala = aunAbsLogModule[0];
-
-
-
-
-
 
 }
 
