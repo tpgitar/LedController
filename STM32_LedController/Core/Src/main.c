@@ -25,6 +25,10 @@
 /* USER CODE BEGIN Includes */
 #include "../../aplDsp/dataAquisition.h"
 
+//#include "../../nRF24/nRF24_Defs.h"
+//#include "../../nRF24/nRF24.h"
+
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,6 +50,7 @@ ADC_HandleTypeDef hadc1;
 DMA_HandleTypeDef hdma_adc1;
 
 SPI_HandleTypeDef hspi1;
+SPI_HandleTypeDef hspi4;
 DMA_HandleTypeDef hdma_spi1_tx;
 
 TIM_HandleTypeDef htim2;
@@ -61,6 +66,7 @@ static void MX_DMA_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_SPI4_Init(void);
 /* USER CODE BEGIN PFP */
 extern void fvSysScheduler(void);
 extern dataAquisition DataAquisition;
@@ -70,7 +76,16 @@ extern dataAquisition DataAquisition;
 /* USER CODE BEGIN 0 */
 
 
+extern "C" void nRF24_Init(SPI_HandleTypeDef *hspi);
+extern "C" void nRF24_SetRXAddress(uint8_t pipe, uint8_t* address); // Remember to define RX address before TX
+extern "C" void nRF24_SetTXAddress(uint8_t* address);
+extern "C" void nRF24_RX_Mode(void);
 
+extern "C" uint8_t nRF24_RXAvailible(void);
+extern "C" void nRF24_ReadRXPaylaod(uint8_t* data);
+
+uint8_t Nrf24_Message[32];
+volatile uint8_t nrf24_rx_flag, nrf24_tx_flag, nrf24_mr_flag;
 
 /* USER CODE END 0 */
 
@@ -78,6 +93,8 @@ extern dataAquisition DataAquisition;
   * @brief  The application entry point.
   * @retval int
   */
+
+
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -108,8 +125,17 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM2_Init();
   MX_ADC1_Init();
+  MX_SPI4_Init();
   /* USER CODE BEGIN 2 */
   DataAquisition.fvStartAquisition();
+
+  //--------------
+  nRF24_Init(&hspi4);
+
+  nRF24_SetRXAddress(0,(uint8_t*) "Odb");
+  nRF24_SetTXAddress((uint8_t*)"Nad");
+  nRF24_RX_Mode();
+  //--------------
 
   /* USER CODE END 2 */
 
@@ -117,6 +143,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if(nRF24_RXAvailible())
+	  {
+		  nRF24_ReadRXPaylaod(Nrf24_Message);
+		  HAL_GPIO_TogglePin(GPIOD, LD3_Pin);
+//		  MessageLength = sprintf(Message, "%c\n\r", Nrf24_Message[0]);
+	//	  HAL_UART_Transmit(&huart2, Message, MessageLength, 1000);
+	  }
+
+
+
+
 	  fvSysScheduler();
     /* USER CODE END WHILE */
 
@@ -175,7 +212,6 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
-
 static void MX_ADC1_Init(void)
 {
 
@@ -258,6 +294,44 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
+  * @brief SPI4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI4_Init(void)
+{
+
+  /* USER CODE BEGIN SPI4_Init 0 */
+
+  /* USER CODE END SPI4_Init 0 */
+
+  /* USER CODE BEGIN SPI4_Init 1 */
+
+  /* USER CODE END SPI4_Init 1 */
+  /* SPI4 parameter configuration*/
+  hspi4.Instance = SPI4;
+  hspi4.Init.Mode = SPI_MODE_MASTER;
+  hspi4.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi4.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi4.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi4.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi4.Init.NSS = SPI_NSS_SOFT;
+  hspi4.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_128;
+  hspi4.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi4.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi4.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi4.Init.CRCPolynomial = 10;
+  if (HAL_SPI_Init(&hspi4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI4_Init 2 */
+
+  /* USER CODE END SPI4_Init 2 */
 
 }
 
@@ -368,6 +442,9 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(OTG_FS_PowerSwitchOn_GPIO_Port, OTG_FS_PowerSwitchOn_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13|GPIO_PIN_14, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, LD4_Pin|LD3_Pin|LD5_Pin|LD6_Pin
                           |Audio_RST_Pin, GPIO_PIN_RESET);
 
@@ -417,6 +494,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB13 PB14 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LD4_Pin LD3_Pin LD5_Pin LD6_Pin

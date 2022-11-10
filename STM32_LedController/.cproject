@@ -122,7 +122,9 @@
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="USB_DEVICE"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="aplDsp"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="main"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="nRF24"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="startup"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="tttt"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -237,7 +239,9 @@
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="USB_DEVICE"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="aplDsp"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="main"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="nRF24"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="startup"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="tttt"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

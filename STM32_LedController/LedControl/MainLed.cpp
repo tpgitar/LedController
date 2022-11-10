@@ -240,7 +240,7 @@ struct def_led_statem_machine
 
 struct def_led_statem_machine State;
 
-enum {EN_LED_EFFECT_RAIN=1,EN_LED_EFFECT_SIN_1HALF,EN_LED_EFFECT_SNOW1,EN_LED_EFFECT_SIN_2HALF,EN_LED_EFFECT_END};
+enum {EN_LED_EFFECT_RAIN=1,EN_LED_EFFECT_SIN_1HALF,EN_LED_EFFECT_SNOW1,EN_LED_EFFECT_SIN_2HALF,EN_LED_EFFECT_SPECTRUM,EN_LED_EFFECT_END};
 
 
 //----------------------------------------------------------------------------------
@@ -463,12 +463,6 @@ void fvSnowEffect1()
 
 void fvSpectrum()
 {
-	static uint16_t unPom = 0;
-	static float fRadius = 0;
-
-	static uint32_t ulSum[5];
-	static uint16_t unAverage[5];
-	static uint16_t unCnt;
 
 	static uint16_t unTim;
 
@@ -481,48 +475,15 @@ void fvSpectrum()
 	{//restart
 		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
 		{
-			LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
+			//LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
+			LedLine[unLineIdx].fvColorPattern1(80,360,2);
 		}
 
 		State.unInternalTask = 1;
 	}
 	else
 	{
-		/*-----------------
-#define CO_ILE_SR 5
-		if(unCnt < CO_ILE_SR)
-		{
-			unCnt++;
-			ulSum[0] += processFFT.fnGetValByFreq(100);
-			ulSum[1] += processFFT.fnGetValByFreq(1000);
-			ulSum[2] += processFFT.fnGetValByFreq(3000);
-			ulSum[3] += processFFT.fnGetValByFreq(7000);
-			ulSum[4] += processFFT.fnGetValByFreq(10000);
-		}
-		else
-		{
-			unCnt = 0;
-
-			for(uint16_t i = 0; i < CO_ILE_SR; i++)
-			{
-				unAverage[i] = ulSum[i]/CO_ILE_SR;
-
-				ulSum[i] = 0;
-			}
-
-		}
-
-		for(uint16_t i = 0; i < CO_ILE_SR; i++)
-		{
-			Bargraf[i].fvBargrafEffect(unAverage[i] *10);
-		}
-		*/
-
-		//-----------------
-
-
 /*
-
 		Bargraf[0].fvBargrafEffect(processFFT.fnGetValByFreqRange(120,150));
 		Bargraf[1].fvBargrafEffect(processFFT.fnGetValByFreqRange(500,1500));
 		Bargraf[2].fvBargrafEffect(processFFT.fnGetValByFreqRange(1500, 5000));
@@ -530,15 +491,11 @@ void fvSpectrum()
 		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreqRange(8000, 12000));
 */
 
-
 		Bargraf[0].fvBargrafEffect(fftBar100Hz.fnGetNormalizedVal());
 		Bargraf[1].fvBargrafEffect(fftBar1kHz.fnGetNormalizedVal());
 		Bargraf[2].fvBargrafEffect(fftBar3kHz.fnGetNormalizedVal());
 		Bargraf[3].fvBargrafEffect(fftBar7kHz.fnGetNormalizedVal());
 		Bargraf[4].fvBargrafEffect(fftBar10kHz.fnGetNormalizedVal());
-
-
-
 
 	}
 }
@@ -551,7 +508,16 @@ void fvMainLed20ms()
 
 
 
-	State.unMainTask = EN_LED_MODE_DROP;
+	//---
+	State.unMainTask = EN_LED_EFFECT_SPECTRUM;
+	State.unMainTimer = CO_TIMEOUT_CHANGE_MODE;
+	for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+	{
+		LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
+		LedLine[unLineIdx].SetSaturation(0,CO_NUMB_LEDS_IN_LINE,100);
+		LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,0);
+	}
+	//---
 
 
 	 if(State.unMainTimer)
@@ -560,11 +526,17 @@ void fvMainLed20ms()
 
 		 switch(State.unMainTask)
 		 {
-		 	 case EN_LED_MODE_DROP:
+
+		 	 case EN_LED_EFFECT_SPECTRUM:
+		 	 {
+		 		fvSpectrum();
+		 	 }break;
+
+		 	 case EN_LED_EFFECT_RAIN:
 		 	 {
 
-		 		fvSpectrum();
-		 		 //fvRainEffect();
+
+		 		 fvRainEffect();
 
 		 	 }break;
 
@@ -611,24 +583,18 @@ void fvMainLed20ms()
 
 		 //State.unMainTask = EN_LED_EFFECT_SIN_2HALF;
 		 //--
-
-
 		 for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
 		 {
 			LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
 			LedLine[unLineIdx].SetSaturation(0,CO_NUMB_LEDS_IN_LINE,100);
 			LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,0);
 		 }
-
-
 	 }
 
 	 for(uint16_t i = 0; i < CO_NUMB_OF_LED_LINES; i++)
 	 {
 		LedLine[i].Refresh();
 	 }
-
-
 }
 
 

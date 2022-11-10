@@ -83,45 +83,26 @@ void Tsystem::fvScheduler()
 	uint16_t unDataLen;
 
 
-
-	static int16_t unPomMin = 10000;
-	static int16_t unPomMax = 0;
-
-	static  int16_t temp;
-
-
-	uint16_t* pInpDataBuf = DataAquisition.fpGetBufferRead(&unDataLen);
-
-	if(pInpDataBuf != NULL)
+	if(bFlag20ms == false)
 	{
+		uint16_t* pInpDataBuf = DataAquisition.fpGetBufferRead(&unDataLen);
 
-		//----------------------
-		char* pBuf = sBufUsb;
-		for(uint16_t i = 0; i < 10; i++)
+		if(pInpDataBuf != NULL)
 		{
-			pBuf += sprintf(pBuf,"%5d ",pInpDataBuf[i]);
+			//----------------------
+			/* Debug
+			char* pBuf = sBufUsb;
+			for(	uint16_t i = 0; i < 10; i++)
+			{
+				pBuf += sprintf(pBuf,"%5d ",pInpDataBuf[i]);
+			}
+			pBuf += sprintf(pBuf,"\r\n");
+			CDC_Transmit_FS((uint8_t*) sBufUsb,strlen(sBufUsb));
+			 */
+			//----------------------
+			processFFT.CalculateFft(pInpDataBuf, unDataLen);
+			DataAquisition.fvReleaseBuf(pInpDataBuf);
 		}
-		pBuf += sprintf(pBuf,"\r\n");
-		CDC_Transmit_FS((uint8_t*) sBufUsb,strlen(sBufUsb));
-		//----------------------
-
-
-		processFFT.CalculateFft(pInpDataBuf, unDataLen);
-		DataAquisition.fvReleaseBuf(pInpDataBuf);
-
-
-
-
-		temp = processFFT.fnGetValByIdx(21);
-
-		if(temp > unPomMax)
-		{unPomMax = temp;}
-
-		if(temp < unPomMin)
-		{unPomMin = temp;}
-
-
-
 	}
 
 
@@ -131,14 +112,13 @@ void Tsystem::fvScheduler()
 	if(bFlag1ms)
 	{
 		bFlag1ms = false;
-		HAL_GPIO_TogglePin(GPIOD, LD3_Pin);
 	}
 
 
 	if(bFlag10ms)
 	{
 		bFlag10ms = false;
-		HAL_GPIO_TogglePin(GPIOD, LD4_Pin);
+		//HAL_GPIO_TogglePin(GPIOD, LD4_Pin);
 
 
 		//------------------
@@ -151,10 +131,6 @@ void Tsystem::fvScheduler()
 		sprintf((char*)sBufUsb,"%d. %d %d %d\r\n",unIdx,Led[unIdx].ucRed,Led[unIdx].ucGreen,Led[unIdx].ucBlue) ;
 		CDC_Transmit_FS((uint8_t*) sBufUsb,strlen(sBufUsb));
 */
-
-
-
-
 	}
 
 
@@ -165,27 +141,17 @@ void Tsystem::fvScheduler()
 		fvMainLed20ms();
 		fvRunDmaTransfer();
 
-		fvTEst();
-
 	}
-
 
 
 	if(bFlag100ms)
 	{
 
 		bFlag100ms = false;
-		//TastADC();
-
-
 /*
 		HAL_GPIO_TogglePin(GPIOD, LD5_Pin);
 		ObsWS2812_100ms_3();
 */
-
-
-
-
 	}
 
 
@@ -193,19 +159,6 @@ void Tsystem::fvScheduler()
 	{
 		bFlag1s = false;
 		HAL_GPIO_TogglePin(GPIOD, LD6_Pin);
-
-
-
-/*
-
-		sprintf((char*)sBufUsb,"\r %5d (%5d,%5d)",temp,unPomMin,unPomMax);
-		CDC_Transmit_FS((uint8_t*) sBufUsb,strlen(sBufUsb));
-*/
-		//------------------
-
-
-
-
 	}
 
 }

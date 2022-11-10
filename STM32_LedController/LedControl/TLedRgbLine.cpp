@@ -203,3 +203,23 @@ void TLedRgbLine::fvSnowEffect(t_openargs openArg, uint16_t unColor)
 	}
 
 }
+
+
+void TLedRgbLine::fvColorPattern1(uint16_t unStartVal, uint16_t unStopVal, uint16_t unFactor)
+{
+/*
+	uint16_t unStartVal = 80;
+	uint16_t unStopVal = 360;
+	uint16_t unFactor = 2;
+*/
+	setCurrentLedPtr(0);
+
+	for(uint16_t unLedIx = 0; unLedIx < unLedTabLenght;unLedIx++)
+	{
+
+		uint16_t unHue =  (unStartVal + ( (unStopVal - unStartVal)/unLedTabLenght ) * unLedIx * unFactor) % 360;
+		getCurrentLedPtr()->unHue = unHue;
+		incObjPtr();
+	}
+
+}

@@ -29,6 +29,9 @@ public:
 	void fvDropEffect();
 
 	void fvSnowEffect(t_openargs openArg, uint16_t unColor = 0);
+	void fvColorPattern1(uint16_t unStartVal = 0,uint16_t unStopVal = 360, uint16_t unFactor = 1);
+
+
 
 	uint16_t unTask;
 	uint16_t unMode;
