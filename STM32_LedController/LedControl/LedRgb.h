@@ -29,11 +29,16 @@ public:
 	void SetHue(uint16_t uInpHue);
 	void SetSaturation(uint8_t ucInpSaturation);
 	void SetBrighness(uint8_t ucInpBrightness);
+	uint8_t GetBrighness();
+
+	void DecreaseBrighness(uint8_t ucStep);
+	void IncreaseBrighness(uint8_t ucStep);
+
 
 	void Refresh(void);
 
 	bool bEnable;
-
+	uint16_t unTimer;
 	uint16_t unHue;
 	uint8_t ucSaturation;
 	uint8_t ucBrightness;

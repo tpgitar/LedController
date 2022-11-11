@@ -458,7 +458,7 @@ void fvSnowEffect1()
 
 
 }
-
+//--------------------------------------------------------------------
 
 
 void fvSpectrum()
@@ -501,6 +501,118 @@ void fvSpectrum()
 }
 
 
+#define CO_GlobaBrightness 20
+
+void fvVanishEffect()
+{
+
+	static ushort unLocTimer = 0;
+
+	unLocTimer++;
+
+	if(unLocTimer % 40 == 0)
+	{
+
+		uint16_t unLedIdx = RandomGen.funGetRandomValue(0, CO_WS2812_NUMB_OF_LEDS);
+
+
+		if(Led[unLedIdx].unTimer == 0)
+		{
+			Led[unLedIdx].unTimer = 0xffff;
+			Led[unLedIdx].SetHue(RandomGen.funGetRandomColor());
+		}
+	}
+
+
+	if(unLocTimer % 4 == 0)
+	{
+
+		for(uint16_t unLedIdx = 0; unLedIdx < CO_WS2812_NUMB_OF_LEDS; unLedIdx++)
+		{
+
+			TLedRgb* pLed = &Led[unLedIdx];
+
+			pLed->bEnable = true;
+
+			if(pLed->unTimer == 0xffff)
+			{
+				pLed->IncreaseBrighness(1);
+
+				if(pLed->GetBrighness() >= CO_GlobaBrightness)
+				{
+					pLed->unTimer = RandomGen.funGetRandomValue(10 * 50, 20 * 50);
+				}
+			}
+			else
+			{
+				if(pLed->unTimer)
+				{
+					pLed->unTimer--;
+				}
+				else
+				{
+					pLed->DecreaseBrighness(1);
+				}
+			}
+		}
+
+	}
+
+
+}
+
+//----------------------------------------------------------------------------------
+void fvTransformColorLineEffect()
+{//triche glupi efekt
+	static uint16_t aunDestColor[] = {0,75,150,225,300};
+	static uint16_t aunActColor[5] = {0,75,150,225,300};
+
+
+	uint16_t unPom = 0;
+
+	for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+	{
+		if(aunActColor[unLineIdx] < aunDestColor[unLineIdx])
+		{
+			aunActColor[unLineIdx]++;
+		}
+
+		if(aunActColor[unLineIdx] > aunDestColor[unLineIdx])
+		{
+			aunActColor[unLineIdx]--;
+		}
+
+		Bargraf[unLineIdx].fvBargrafEffect(1000);
+		Bargraf[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,aunActColor[unLineIdx]);
+
+		if(aunDestColor[unLineIdx] != aunActColor[unLineIdx])
+		{unPom++;}
+	}
+
+
+
+	if(unPom == 0)
+	{
+		uint8_t ucTemp = aunDestColor[0];
+		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES - 1; unLineIdx++)
+		{
+			aunDestColor[unLineIdx] = aunDestColor[unLineIdx + 1];
+		}
+
+		aunDestColor[CO_NUMB_OF_LED_LINES - 1] = ucTemp;
+	}
+
+
+
+
+
+
+
+
+
+	//LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
+}
+//----------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------
 void fvMainLed20ms()
@@ -510,6 +622,7 @@ void fvMainLed20ms()
 
 	//---
 	State.unMainTask = EN_LED_EFFECT_SPECTRUM;
+/*
 	State.unMainTimer = CO_TIMEOUT_CHANGE_MODE;
 	for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
 	{
@@ -517,19 +630,22 @@ void fvMainLed20ms()
 		LedLine[unLineIdx].SetSaturation(0,CO_NUMB_LEDS_IN_LINE,100);
 		LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,0);
 	}
+*/
 	//---
 
 
 	 if(State.unMainTimer)
 	 {
-		 State.unMainTimer--;
+		 //State.unMainTimer--;
 
 		 switch(State.unMainTask)
 		 {
 
 		 	 case EN_LED_EFFECT_SPECTRUM:
 		 	 {
-		 		fvSpectrum();
+		 		//fvSpectrum();
+		 		fvVanishEffect();
+		 		//fvTransformColorLineEffect();
 		 	 }break;
 
 		 	 case EN_LED_EFFECT_RAIN:

@@ -26,6 +26,33 @@ void TLedRgb::SetBrighness(uint8_t ucInpBrightness)
 {
 	ucBrightness = ucInpBrightness;
 }
+
+uint8_t TLedRgb::GetBrighness()
+{
+	return ucBrightness;
+}
+
+
+
+
+void TLedRgb::IncreaseBrighness(uint8_t ucStep)
+{
+	if(ucBrightness + ucStep < CO_ucMaxBrightness)
+	{ucBrightness += ucStep;}
+	else
+	{ucBrightness = CO_ucMaxBrightness;}
+}
+
+
+void TLedRgb::DecreaseBrighness(uint8_t ucStep)
+{
+	if(ucBrightness  > ucStep)
+	{ucBrightness -= ucStep;}
+	else
+	{ucBrightness = CO_ucMinBrightness;}
+}
+
+
 //--------------------------------------------------------------------------------------------------------
 #include "string.h"
 #include "math.h"
