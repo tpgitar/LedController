@@ -41,6 +41,44 @@ void TLedRgbLine::fvMoveDown(uint16_t unStep, uint16_t unLedStart,uint16_t unLed
 }
 
 
+//---------------------------------------------------------------------------------------------------------------------------------------------------
+void TLedRgbLine::fvMoveDownV2(uint16_t unStep, uint16_t unLedStart,uint16_t unLedStop,bool bMoveHue, bool bMoveBrightness,  bool bCyclic)
+{
+
+	if(unLedStop >= unLedTabLenght)
+	{unLedStop = unLedTabLenght - 1;}
+
+	if(unLedStart >= unLedTabLenght)
+	{unLedStart = unLedTabLenght - 1;}
+
+
+	for(uint16_t unStepIdx = 0;unStepIdx < unStep; unStepIdx++)
+	{
+		uint16_t unBufZeroBright = 0;
+		uint16_t unBufZeroHue = 0;
+
+		if(bCyclic)
+		{
+			unBufZeroBright = getBrightness(unLedStart);
+			unBufZeroHue = getHue(unLedStart);
+		}
+
+		for(uint16_t unLedIdx = unLedStart; unLedIdx < unLedStop; unLedIdx++)
+		{
+			if(bMoveBrightness)
+			{SetBrigtness(unLedIdx,getBrightness(unLedIdx + 1));}
+			if(bMoveHue)
+			{SetHue(unLedIdx,getHue(unLedIdx + 1));}
+		}
+
+		if(bMoveBrightness)
+		{SetBrigtness(unLedStop,unBufZeroBright);}
+		if(bMoveHue)
+		{SetHue(unLedStop,unBufZeroHue);}
+	}
+
+
+}
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------

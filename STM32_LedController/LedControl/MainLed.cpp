@@ -602,17 +602,58 @@ void fvTransformColorLineEffect()
 		aunDestColor[CO_NUMB_OF_LED_LINES - 1] = ucTemp;
 	}
 
-
-
-
-
-
-
-
-
 	//LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
 }
 //----------------------------------------------------------------------------------
+void fvTransformColor1()
+{
+	static uint16_t unTimer = 0;
+
+	unTimer++;
+
+
+	if(State.unInternalTask == 0)
+	{//restart
+		fnColorTransformation(10,true);
+
+		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+		{
+			LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE-1,10);
+
+			for(uint16_t unLedIx = 0;unLedIx < CO_NUMB_LEDS_IN_LINE; unLedIx++)
+			{
+
+				uint16_t unPhase = (5 * unLedIx + unLineIdx * 10) % CO_NUMB_LEDS_IN_LINE;
+
+				uint8_t ucSin = static_cast<uint8_t>( fabs(sin ( CO_PI/(CO_NUMB_LEDS_IN_LINE-1) * unPhase ) )
+						* CO_GlobaBrightness );
+
+				LedLine[unLineIdx].SetBrigtness(unLedIx, ucSin + 10);
+
+			}
+
+			//nSin = static_cast<int16_t>( fabs(sin(fRadius + (unLineIdx * CO_SIN_RASTER) ) ) * 1000 );
+
+
+			LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE-1);
+		}
+
+		State.unInternalTask = 1;
+
+	}
+
+	fnColorTransformation(10,false);
+
+
+	if(unTimer % 2 == 0)
+	{
+		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+		{
+			LedLine[unLineIdx].fvMoveDownV2(1,0,CO_NUMB_LEDS_IN_LINE-1,false, true,true);
+		}
+	}
+
+}
 
 //----------------------------------------------------------------------------------
 void fvMainLed20ms()
@@ -644,7 +685,8 @@ void fvMainLed20ms()
 		 	 case EN_LED_EFFECT_SPECTRUM:
 		 	 {
 		 		//fvSpectrum();
-		 		fvVanishEffect();
+		 		fvTransformColor1();
+		 		//fvVanishEffect();
 		 		//fvTransformColorLineEffect();
 		 	 }break;
 

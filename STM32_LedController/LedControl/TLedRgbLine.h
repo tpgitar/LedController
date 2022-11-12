@@ -25,6 +25,8 @@ public:
 
 
 	void fvMoveDown(uint16_t unStep, uint16_t unLedStart = 0 ,uint16_t unLedStop = 0xffff);
+	void fvMoveDownV2(uint16_t unStep, uint16_t unLedStart = 0,uint16_t unLedStop = 0xffff,bool bMoveHue = true,
+				           bool bMoveBrightness = true, bool bCyclic = false);
 
 	void fvDropEffect();
 
