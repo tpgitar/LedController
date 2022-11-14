@@ -605,11 +605,99 @@ void fvTransformColorLineEffect()
 	//LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
 }
 //----------------------------------------------------------------------------------
+#define CO_ModulationDepth 10
+#define CO_BrightBase 5
 void fvTransformColor1()
 {
 	static uint16_t unTimer = 0;
 
 	unTimer++;
+
+/*
+	switch(State.unInternalTask)
+	{
+		case 0:
+		{
+
+			fnColorTransformation(10,true);
+
+			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+			{
+				LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE-1,10);
+
+				for(uint16_t unLedIx = 0;unLedIx < CO_NUMB_LEDS_IN_LINE; unLedIx++)
+				{
+
+					uint16_t unPhase = (3 * unLedIx + unLineIdx * 10) % CO_NUMB_LEDS_IN_LINE;
+
+					uint8_t ucSin = static_cast<uint8_t>( (sin ( 2 * CO_PI/(CO_NUMB_LEDS_IN_LINE-1) * unPhase ) + 1)
+							* CO_ModulationDepth );
+
+					LedLine[unLineIdx].SetBrigtness(unLedIx, ucSin + CO_BrightBase);
+
+				}
+
+				//nSin = static_cast<int16_t>( fabs(sin(fRadius + (unLineIdx * CO_SIN_RASTER) ) ) * 1000 );
+
+
+				LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE-1);
+			}
+
+			State.unInternalTask = 1;
+			unTimer = 0;
+
+		}break;
+
+		case 1:
+		{
+			fnColorTransformation(10,false);
+
+			if(unTimer % 2 == 0)
+			{
+				for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+				{
+					LedLine[unLineIdx].fvMoveDownV2(1,0,CO_NUMB_LEDS_IN_LINE-1,false, true,true);
+				}
+			}
+
+			if(unTimer >= 500)
+			{
+				State.unInternalTask = 2;
+				unTimer = 0;
+			}
+
+
+		}break;
+
+		case 2:
+		{
+			if(unTimer % 2 == 0)
+			{
+				for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+				{
+					LedLine[unLineIdx].SetBrigtness(0,CO_BrightBase + CO_ModulationDepth);
+					LedLine[unLineIdx].fvMoveDownV2(1,0,CO_NUMB_LEDS_IN_LINE-1,false, true,true);
+				}
+			}
+
+			if(unTimer >= 500)
+			{
+				State.unInternalTask = 0;
+				unTimer = 0;
+			}
+		}break;
+
+
+		default:
+		{
+			State.unInternalTask = 0;
+		}break;
+	}
+
+	*/
+
+
+
 
 
 	if(State.unInternalTask == 0)
@@ -623,12 +711,12 @@ void fvTransformColor1()
 			for(uint16_t unLedIx = 0;unLedIx < CO_NUMB_LEDS_IN_LINE; unLedIx++)
 			{
 
-				uint16_t unPhase = (5 * unLedIx + unLineIdx * 10) % CO_NUMB_LEDS_IN_LINE;
+				uint16_t unPhase = (3 * unLedIx + unLineIdx * 20) % CO_NUMB_LEDS_IN_LINE;
 
-				uint8_t ucSin = static_cast<uint8_t>( fabs(sin ( CO_PI/(CO_NUMB_LEDS_IN_LINE-1) * unPhase ) )
-						* CO_GlobaBrightness );
+				uint8_t ucSin = static_cast<uint8_t>( (sin ( 2 * CO_PI/(CO_NUMB_LEDS_IN_LINE-1) * unPhase ) + 1)
+						* CO_ModulationDepth );
 
-				LedLine[unLineIdx].SetBrigtness(unLedIx, ucSin + 10);
+				LedLine[unLineIdx].SetBrigtness(unLedIx, ucSin + 5);
 
 			}
 
@@ -642,7 +730,7 @@ void fvTransformColor1()
 
 	}
 
-	fnColorTransformation(10,false);
+	fnColorTransformation(2,false);
 
 
 	if(unTimer % 2 == 0)
@@ -652,6 +740,8 @@ void fvTransformColor1()
 			LedLine[unLineIdx].fvMoveDownV2(1,0,CO_NUMB_LEDS_IN_LINE-1,false, true,true);
 		}
 	}
+
+
 
 }
 
