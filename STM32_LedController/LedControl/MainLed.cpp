@@ -37,6 +37,9 @@ FftBar fftBar10kHz(&processFFT,8000,12000);
 //-----------------------------------------------------------------------------------------------------------------------------
 void fnSetMatrixColors(TLedRgbLine* pLine,TinterpolBiline* pColorMatrix);
 void fnColorTransformation(uint16_t unDelaySec, bool bRestart);
+void fnColorTransformation(uint16_t unDelaySec, bool bRestart, const struct def_color_srt* pColorStruct);
+
+
 //-----------------------------------------------------------------------------------------------------------------------------
 #define CO_NUMB_OF_LED_LINES 5
 #define CO_NUMB_LEDS_IN_LINE 60
@@ -607,102 +610,16 @@ void fvTransformColorLineEffect()
 //----------------------------------------------------------------------------------
 #define CO_ModulationDepth 10
 #define CO_BrightBase 5
-void fvTransformColor1()
+//ColorStructDark
+void fvTransformColor1(const struct def_color_srt* pStructColor)
 {
 	static uint16_t unTimer = 0;
 
 	unTimer++;
 
-/*
-	switch(State.unInternalTask)
-	{
-		case 0:
-		{
-
-			fnColorTransformation(10,true);
-
-			for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
-			{
-				LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE-1,10);
-
-				for(uint16_t unLedIx = 0;unLedIx < CO_NUMB_LEDS_IN_LINE; unLedIx++)
-				{
-
-					uint16_t unPhase = (3 * unLedIx + unLineIdx * 10) % CO_NUMB_LEDS_IN_LINE;
-
-					uint8_t ucSin = static_cast<uint8_t>( (sin ( 2 * CO_PI/(CO_NUMB_LEDS_IN_LINE-1) * unPhase ) + 1)
-							* CO_ModulationDepth );
-
-					LedLine[unLineIdx].SetBrigtness(unLedIx, ucSin + CO_BrightBase);
-
-				}
-
-				//nSin = static_cast<int16_t>( fabs(sin(fRadius + (unLineIdx * CO_SIN_RASTER) ) ) * 1000 );
-
-
-				LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE-1);
-			}
-
-			State.unInternalTask = 1;
-			unTimer = 0;
-
-		}break;
-
-		case 1:
-		{
-			fnColorTransformation(10,false);
-
-			if(unTimer % 2 == 0)
-			{
-				for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
-				{
-					LedLine[unLineIdx].fvMoveDownV2(1,0,CO_NUMB_LEDS_IN_LINE-1,false, true,true);
-				}
-			}
-
-			if(unTimer >= 500)
-			{
-				State.unInternalTask = 2;
-				unTimer = 0;
-			}
-
-
-		}break;
-
-		case 2:
-		{
-			if(unTimer % 2 == 0)
-			{
-				for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
-				{
-					LedLine[unLineIdx].SetBrigtness(0,CO_BrightBase + CO_ModulationDepth);
-					LedLine[unLineIdx].fvMoveDownV2(1,0,CO_NUMB_LEDS_IN_LINE-1,false, true,true);
-				}
-			}
-
-			if(unTimer >= 500)
-			{
-				State.unInternalTask = 0;
-				unTimer = 0;
-			}
-		}break;
-
-
-		default:
-		{
-			State.unInternalTask = 0;
-		}break;
-	}
-
-	*/
-
-
-
-
-
 	if(State.unInternalTask == 0)
 	{//restart
-		fnColorTransformation(10,true);
+		fnColorTransformation(10,true,pStructColor);
 
 		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
 		{
@@ -730,7 +647,7 @@ void fvTransformColor1()
 
 	}
 
-	fnColorTransformation(2,false);
+	fnColorTransformation(2,false,pStructColor);
 
 
 	if(unTimer % 2 == 0)
@@ -775,8 +692,10 @@ void fvMainLed20ms()
 		 	 case EN_LED_EFFECT_SPECTRUM:
 		 	 {
 		 		//fvSpectrum();
-		 		fvTransformColor1();
+		 		//fvTransformColor1(&ColorStructDark);
+		 		fvTransformColor1(&ColorStructStandard);
 		 		//fvVanishEffect();
+		 		//fvSnowEffect1();
 		 		//fvTransformColorLineEffect();
 		 	 }break;
 
@@ -1236,7 +1155,7 @@ void fnSetMatrixColors(TLedRgbLine* pLine,TinterpolBiline* pColorMatrix)
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
 
-void fnColorTransformation(uint16_t unDelaySec, bool bRestart)
+void fnColorTransformation(uint16_t unDelaySec, bool bRestart, const struct def_color_srt* pColorStruct)
 {
 	static uint16_t ColorDest_LD = 0;
 	static uint16_t ColorDest_LG = 0;
@@ -1262,25 +1181,25 @@ void fnColorTransformation(uint16_t unDelaySec, bool bRestart)
 				case 0:
 				{
 					//ColorDest_LD = RandomGen.funGetRandomValue(0,360);
-					ColorDest_LD = RandomGen.funGetRandomColor();
+					ColorDest_LD = RandomGen.funGetRandomColor(pColorStruct);
 				}break;
 
 				case 1:
 				{
 					//ColorDest_LG = RandomGen.funGetRandomValue(0,360);
-					ColorDest_LG = RandomGen.funGetRandomColor();
+					ColorDest_LG = RandomGen.funGetRandomColor(pColorStruct);
 				}break;
 
 				case 2:
 				{
 					//ColorDest_PD = RandomGen.funGetRandomValue(0,360);
-					ColorDest_PD = RandomGen.funGetRandomColor();
+					ColorDest_PD = RandomGen.funGetRandomColor(pColorStruct);
 				}break;
 
 				case 3:
 				{
 					//ColorDest_PG = RandomGen.funGetRandomValue(0,360);
-					ColorDest_PG = RandomGen.funGetRandomColor();
+					ColorDest_PG = RandomGen.funGetRandomColor(pColorStruct);
 				}break;
 			}
 
@@ -1314,8 +1233,11 @@ void fnColorTransformation(uint16_t unDelaySec, bool bRestart)
 
 	}
 }
-
-
+//-------------
+void fnColorTransformation(uint16_t unDelaySec, bool bRestart)
+{
+	fnColorTransformation(unDelaySec,bRestart, &ColorStructStandard);
+}
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------

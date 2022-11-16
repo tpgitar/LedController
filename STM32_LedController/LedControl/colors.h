@@ -75,8 +75,17 @@
 
 
 
+struct def_color_srt
+{
+	const uint16_t* pColorTab;
+	const uint16_t unNumbOfColors;
+};
+
+
 extern const uint16_t ColorTab[];
 extern uint16_t funGetSizeofColorTab();
+extern const struct def_color_srt ColorStructStandard;
+extern const struct def_color_srt ColorStructDark;
 
 
 

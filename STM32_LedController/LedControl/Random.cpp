@@ -36,3 +36,13 @@ uint16_t TRandomGenerator::funGetRandomColor()
 
 	return ColorTab[unIdx];
 }
+
+
+uint16_t TRandomGenerator::funGetRandomColor(const struct def_color_srt* pColorStr)
+{
+	uint16_t unIdx = funGetRandomValue(0,pColorStr->unNumbOfColors - 1);
+
+	return pColorStr->pColorTab[unIdx];
+
+
+}

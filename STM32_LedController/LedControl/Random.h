@@ -24,7 +24,9 @@ public:
 
 	uint16_t funGetRandomValue(uint16_t unMin,uint16_t unMax);
 
+
 	uint16_t funGetRandomColor();
+	uint16_t funGetRandomColor(const struct def_color_srt* pColorStr);
 
 };
 

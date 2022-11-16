@@ -69,6 +69,60 @@ const uint16_t ColorTab[] = {
 
 
 
+const struct def_color_srt ColorStructStandard = {
+
+		&ColorTab[0],
+		sizeof(ColorTab)/sizeof(uint16_t)
+
+};
+
+
+const uint16_t ColorTabDark[] = {
+
+/*
+		CO_COLOR_50_GREEN,
+		CO_COLOR_60_GREEN,
+		CO_COLOR_70_GREEN,
+		CO_COLOR_80_GREEN,
+		CO_COLOR_90_GREEN,
+*/
+		CO_COLOR_100_GREEN,
+		CO_COLOR_110_GREEN,
+		CO_COLOR_120_GREEN,
+		CO_COLOR_124_GREEN_BL,			  //!!
+
+		CO_COLOR_130_BLUE_GR,
+		CO_COLOR_140_BLUE_BRIGHT,
+		CO_COLOR_160_BLUE_BRIGHT,
+		CO_COLOR_180_BLUE,
+		CO_COLOR_200_BLUE,
+		CO_COLOR_210_BLUE,
+		CO_COLOR_230_BLUE,
+		CO_COLOR_240_BLUE_STRONG,
+		CO_COLOR_250_BLUE_PURPL,
+
+		CO_COLOR_260_PURPL_BLUE,
+		CO_COLOR_270_PURPLE_BRIGHT,
+		CO_COLOR_280_PURPLE,
+		CO_COLOR_290_PURPLE,
+		CO_COLOR_300_PURPLE,
+		CO_COLOR_300_PURPLE,
+		CO_COLOR_310_PURPLE,
+		CO_COLOR_320_PURPLE,
+		CO_COLOR_330_PURPLE,
+		CO_COLOR_340_PURPLE_STRONG,
+//		CO_COLOR_350_PINK
+};
+
+
+const struct def_color_srt ColorStructDark = {
+
+		&ColorTabDark[0],
+		sizeof(ColorTabDark)/sizeof(uint16_t)
+
+};
+
+
 uint16_t funGetSizeofColorTab()
 {
 	return sizeof(ColorTab)/sizeof(uint16_t);
