@@ -143,6 +143,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  /*
 	  if(nRF24_RXAvailible())
 	  {
 		  nRF24_ReadRXPaylaod(Nrf24_Message);
@@ -151,6 +152,7 @@ int main(void)
 	//	  HAL_UART_Transmit(&huart2, Message, MessageLength, 1000);
 	  }
 
+*/
 
 
 

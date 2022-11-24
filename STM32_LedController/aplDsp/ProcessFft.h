@@ -38,6 +38,7 @@ public:
 	void fvSignalStatistics(uint16_t* punInpBuf, uint16_t unInpBufLen);
 	uint16_t fnGetValByFreq_Average(uint16_t unFreq);
 	float32_t ffGetMaxValByFreqRange_Lin(uint16_t unFreqMin, uint16_t unFreqMax);
+	bool isSignalPresent();
 
 
 	struct
@@ -55,6 +56,9 @@ public:
 		float32_t fFFTModMin;
 		float32_t fFFTModMax;
 		float32_t fFFTSkladStala;
+
+		uint16_t unSignalPresentCnt;
+		bool bSignalPresent;
 
 
 

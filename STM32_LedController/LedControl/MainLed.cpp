@@ -232,6 +232,9 @@ TBargraf BargrafHalfDown[CO_NUMB_OF_LED_LINES] = {
 struct def_led_statem_machine
 {
 	uint16_t unMainTask;
+	uint16_t unPomTask;
+	uint16_t unPomTimer;
+
 	uint16_t unInternalTask;
 	uint16_t unMainTimer;
 
@@ -239,11 +242,11 @@ struct def_led_statem_machine
 
 };
 
-#define CO_TIMEOUT_CHANGE_MODE   (50*60*1) //10 sek for test  //(50*60*10) //10min
+#define CO_TIMEOUT_CHANGE_MODE   (50*20*1) //10 sek for test  //(50*60*10) //10min
 
 struct def_led_statem_machine State;
 
-enum {EN_LED_EFFECT_RAIN=1,EN_LED_EFFECT_SIN_1HALF,EN_LED_EFFECT_SNOW1,EN_LED_EFFECT_SIN_2HALF,EN_LED_EFFECT_SPECTRUM,EN_LED_EFFECT_END};
+enum {EN_LED_EFFECT_RAIN=1,EN_LED_EFFECT_SIN_1HALF,EN_LED_EFFECT_SNOW1,EN_LED_EFFECT_SIN_2HALF,EN_LED_EFFECT_END};
 
 
 //----------------------------------------------------------------------------------
@@ -462,8 +465,6 @@ void fvSnowEffect1()
 
 }
 //--------------------------------------------------------------------
-
-
 void fvSpectrum()
 {
 
@@ -480,6 +481,11 @@ void fvSpectrum()
 		{
 			//LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
 			LedLine[unLineIdx].fvColorPattern1(80,360,2);
+
+
+			LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,0);
+			LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
+			LedLine[unLineIdx].SetSaturation(0,CO_NUMB_LEDS_IN_LINE,100);
 		}
 
 		State.unInternalTask = 1;
@@ -513,7 +519,17 @@ void fvVanishEffect()
 
 	unLocTimer++;
 
-	if(unLocTimer % 40 == 0)
+
+	if (State.unInternalTask == 0)
+	{
+		for(uint16_t unLedIdx = 0; unLedIdx < CO_WS2812_NUMB_OF_LEDS; unLedIdx++)
+		{Led[unLedIdx].unTimer = 0x0;}
+		State.unInternalTask = 1;
+	}
+
+
+
+	if(unLocTimer % 20 == 0)
 	{
 
 		uint16_t unLedIdx = RandomGen.funGetRandomValue(0, CO_WS2812_NUMB_OF_LEDS);
@@ -529,10 +545,81 @@ void fvVanishEffect()
 
 	if(unLocTimer % 4 == 0)
 	{
+		for(uint16_t unLedIdx = 0; unLedIdx < CO_WS2812_NUMB_OF_LEDS; unLedIdx++)
+		{
+			TLedRgb* pLed = &Led[unLedIdx];
 
+			pLed->bEnable = true;
+
+			if(pLed->unTimer == 0xffff)
+			{
+				pLed->IncreaseBrighness(1);
+
+				if(pLed->GetBrighness() >= CO_GlobaBrightness)
+				{pLed->unTimer = RandomGen.funGetRandomValue(5 * 50, 15 * 50);}
+			}
+			else
+			{
+				if(pLed->unTimer)
+				{pLed->unTimer--;}
+				else
+				{pLed->DecreaseBrighness(1);}
+			}
+		}
+
+	}
+}
+
+//----------------------------------------------------------------------------------
+
+void fvVanishEffect2()
+{
+
+	static ushort unLocTimer = 0;
+
+	unLocTimer++;
+
+/*
+	if(State.unInternalTask == 0)
+	{
+		for(uint16_t unLedIdx = 0; unLedIdx < CO_WS2812_NUMB_OF_LEDS; unLedIdx++)
+		{
+			Led[unLedIdx].SetHue(RandomGen.funGetRandomColor());
+			Led[unLedIdx].SetBrighness(CO_GlobaBrightness);
+			Led[unLedIdx].unTimer = 0xffff;
+		}
+		State.unInternalTask = 1;
+	}
+*/
+
+	if (State.unInternalTask == 0)
+	{
+		for(uint16_t unLedIdx = 0; unLedIdx < CO_WS2812_NUMB_OF_LEDS; unLedIdx++)
+		{Led[unLedIdx].unTimer = 0x0;}
+		State.unInternalTask = 1;
+	}
+
+
+
+
+	if(unLocTimer % 40 == 0)
+	{
 		for(uint16_t unLedIdx = 0; unLedIdx < CO_WS2812_NUMB_OF_LEDS; unLedIdx++)
 		{
 
+			if( (Led[unLedIdx].GetBrighness() <= 1) && (Led[unLedIdx].unTimer == 0))
+			{
+				Led[unLedIdx].unTimer = 0xffff;
+				Led[unLedIdx].SetHue(RandomGen.funGetRandomColor());
+			}
+		}
+	}
+
+
+	if(unLocTimer % 5 == 0)
+	{
+		for(uint16_t unLedIdx = 0; unLedIdx < CO_WS2812_NUMB_OF_LEDS; unLedIdx++)
+		{
 			TLedRgb* pLed = &Led[unLedIdx];
 
 			pLed->bEnable = true;
@@ -543,25 +630,22 @@ void fvVanishEffect()
 
 				if(pLed->GetBrighness() >= CO_GlobaBrightness)
 				{
-					pLed->unTimer = RandomGen.funGetRandomValue(10 * 50, 20 * 50);
+					pLed->unTimer = RandomGen.funGetRandomValue(0, 20);
 				}
 			}
 			else
 			{
 				if(pLed->unTimer)
-				{
-					pLed->unTimer--;
-				}
+				{pLed->unTimer--;}
 				else
 				{
-					pLed->DecreaseBrighness(1);
+					if(pLed->GetBrighness() > 1)
+					{pLed->DecreaseBrighness(1);}
 				}
 			}
 		}
 
 	}
-
-
 }
 
 //----------------------------------------------------------------------------------
@@ -611,7 +695,10 @@ void fvTransformColorLineEffect()
 #define CO_ModulationDepth 10
 #define CO_BrightBase 5
 //ColorStructDark
-void fvTransformColor1(const struct def_color_srt* pStructColor)
+
+
+
+void fvTransformColorEffect1(const struct def_color_srt* pStructColor)
 {
 	static uint16_t unTimer = 0;
 
@@ -663,71 +750,124 @@ void fvTransformColor1(const struct def_color_srt* pStructColor)
 }
 
 //----------------------------------------------------------------------------------
+#define CO_TIME_SIGNAL_ON  (50 * 5)
+#define CO_TIME_SIGNAL_OFF  (50 * 15)
+
 void fvMainLed20ms()
 {
 
 
-
-	//---
-	State.unMainTask = EN_LED_EFFECT_SPECTRUM;
-/*
-	State.unMainTimer = CO_TIMEOUT_CHANGE_MODE;
-	for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
+	switch(State.unPomTask)
 	{
-		LedLine[unLineIdx].fvEnable(0,CO_NUMB_LEDS_IN_LINE);
-		LedLine[unLineIdx].SetSaturation(0,CO_NUMB_LEDS_IN_LINE,100);
-		LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,0);
+		case 0:
+		{
+			if(processFFT.isSignalPresent())
+			{State.unPomTimer++;}
+			else
+			{State.unPomTimer = 0;}
+
+			if(State.unPomTimer > CO_TIME_SIGNAL_ON)
+			{
+				State.unPomTask = 1;
+				State.unPomTimer = 0;
+				State.unInternalTask = 0;
+			}
+
+		}break;
+
+		case 1:
+		{
+
+			if(!processFFT.isSignalPresent())
+			{State.unPomTimer++;}
+			else
+			{State.unPomTimer = 0;}
+
+			if(State.unPomTimer > CO_TIME_SIGNAL_OFF)
+			{
+				State.unPomTimer = 0;
+				State.unPomTask = 0;
+				State.unMainTimer = 0;
+			}
+
+		}break;
 	}
-*/
-	//---
+
+
+
+//	State.unMainTask = EN_LED_EFFECT_SPECTRUM;
+
+	if(State.unPomTask == 1)
+	{
+		fvSpectrum();
+	}
+	else
+	{
+
+
+
 
 
 	 if(State.unMainTimer)
 	 {
-		 //State.unMainTimer--;
+		 State.unMainTimer--;
 
 		 switch(State.unMainTask)
 		 {
 
-		 	 case EN_LED_EFFECT_SPECTRUM:
+
+		 /*
+			void fvRainEffect()
+					void fvSinus1HalfEffect()
+			void fvSinus2HalfEffect()
+			void fvSnowEffect1()
+			void fvVanishEffect()
+			void fvVanishEffect2()
+			void fvTransformColorEffect1(const struct def_color_srt* pStructColor)
+					void fvTransformColorLineEffect()
+*/
+
+
+		 	 case 1:
 		 	 {
-		 		//fvSpectrum();
-		 		//fvTransformColor1(&ColorStructDark);
-		 		fvTransformColor1(&ColorStructStandard);
-		 		//fvVanishEffect();
-		 		//fvSnowEffect1();
-		 		//fvTransformColorLineEffect();
-		 	 }break;
-
-		 	 case EN_LED_EFFECT_RAIN:
-		 	 {
-
-
 		 		 fvRainEffect();
-
 		 	 }break;
 
 
-		 	 case EN_LED_EFFECT_SIN_1HALF:
+		 	 case 2:
 			 {
-				 fvSinus1HalfEffect();
+				 fvTransformColorEffect1(&ColorStructStandard);
 			 }break;
 
-		 	 case EN_LED_EFFECT_SIN_2HALF:
+		 	 case 3:
+			 {
+				 fvSnowEffect1();
+
+			 }break;
+
+		 	 case 4:
+		 	 {
+		 		 fvVanishEffect2();
+		 	 }break;
+
+		 	 case 5:
 			 {
 				 fvSinus2HalfEffect();
 			 }break;
 
-		 	 case EN_LED_EFFECT_SNOW1:
-			 {
-				 fvSnowEffect1();
-			 }break;
+		 	 case 6:
+		 	 {
+		 		 fvVanishEffect();
+
+		 	 }break;
+
 
 
 
 		 	 default:
 		 	 {
-		 		State.unMainTimer = 0;
+		 		State.unMainTimer = CO_TIMEOUT_CHANGE_MODE;
+		 		State.unMainTask = 1;
 		 	 }break;
 		 }
 
@@ -738,17 +878,16 @@ void fvMainLed20ms()
 		 State.unMainTimer = CO_TIMEOUT_CHANGE_MODE;
 
 		 State.unInternalTask = 0;
-		 //State.unMainTask = RandomGen.funGetRandomValue(1,EN_LED_EFFECT_END - 1);
-
 		 //--
-
 		 State.unMainTask++;
+/*
 		 if(State.unMainTask >= EN_LED_EFFECT_END)
 		 {
 			 State.unMainTask = 1;
 		 }
 
-		 //State.unMainTask = EN_LED_EFFECT_SIN_2HALF;
+*/
+
 		 //--
 		 for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
 		 {
@@ -757,11 +896,12 @@ void fvMainLed20ms()
 			LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,0);
 		 }
 	 }
+	}
 
-	 for(uint16_t i = 0; i < CO_NUMB_OF_LED_LINES; i++)
-	 {
+	for(uint16_t i = 0; i < CO_NUMB_OF_LED_LINES; i++)
+	{
 		LedLine[i].Refresh();
-	 }
+	}
 }
 
 

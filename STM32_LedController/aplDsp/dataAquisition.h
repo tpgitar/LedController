@@ -80,10 +80,13 @@ public:
 	}
 
 
+
 	struct
 	{
 		uint16_t unHalfDmaCnt;
 		uint16_t unCompleteDmaCnt;
+
+
 
 	} Stat;
 

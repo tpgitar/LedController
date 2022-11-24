@@ -12,15 +12,6 @@ ProcessFft::ProcessFft()
 	// TODO Auto-generated constructor stub
 
     arm_rfft_fast_init_f32(&S,CO_PROCESS_FFT_INP_BUF);
-	Stat.unAdcMax = 0x00;
-	Stat.unAdcMin = 0xffff;
-
-	Stat.unFFTModMin = 0xffff;
-	Stat.unFFTModMax = 0;
-
-
-	Stat.fFFTModMin = MAXFLOAT;
-	Stat.unFFTModMax = -1 *  MAXFLOAT;
 
 
 }
@@ -38,12 +29,21 @@ void ProcessFft::ConvIntToFloat(uint16_t* pInp,uint16_t unDataLen)
 
 }
 //--------------------------------------------------------------------------
+#define CO_SIGN_LEVEL_PRESENT  400
+#define CO_SIGN_LEVEL_NOT_PRESENT  300
+
+#define CO_CNT_SIGNAL_PRESENT 30
+
 
 void ProcessFft::fvSignalStatistics(uint16_t* punInpBuf, uint16_t unInpBufLen)
 {
 
 	uint32_t ulSum = 0;
+	uint16_t unDeltaMax,unDeltaMin;
 
+
+	Stat.unAdcMax = 0x00;
+	Stat.unAdcMin = 0xffff;
 
 
 	for(uint16_t i = 0; i < unInpBufLen;i++)
@@ -60,12 +60,42 @@ void ProcessFft::fvSignalStatistics(uint16_t* punInpBuf, uint16_t unInpBufLen)
 	}
 	Stat.unAdcAverage =  ulSum/unInpBufLen;
 
+	unDeltaMin = Stat.unAdcAverage - Stat.unAdcMin;
+	unDeltaMax = Stat.unAdcMax - Stat.unAdcAverage;
+
+	//--------------
+	if( (unDeltaMin > CO_SIGN_LEVEL_PRESENT) && (unDeltaMax > CO_SIGN_LEVEL_PRESENT))
+	{
+		if(Stat.unSignalPresentCnt < CO_CNT_SIGNAL_PRESENT)
+		{Stat.unSignalPresentCnt++;}
+	}
 
 
+	if( (unDeltaMin < CO_SIGN_LEVEL_NOT_PRESENT) && (unDeltaMax <  CO_SIGN_LEVEL_NOT_PRESENT))
+	{
+		if(Stat.unSignalPresentCnt)
+		{Stat.unSignalPresentCnt--;}
+	}
 
+	if(Stat.unSignalPresentCnt >= CO_CNT_SIGNAL_PRESENT)
+	{
+		Stat.bSignalPresent = true;
+	}
+
+	if(Stat.unSignalPresentCnt == 0)
+	{
+		Stat.bSignalPresent = false;
+	}
 
 }
 
+
+bool ProcessFft::isSignalPresent()
+{
+	return Stat.bSignalPresent;
+}
+
+//--------------------------------------------------------------------------
 
 void ProcessFft::CalculateFft(uint16_t* punInpBuf, uint16_t unInpBufLen)
 {

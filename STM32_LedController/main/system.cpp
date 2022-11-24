@@ -101,6 +101,7 @@ void Tsystem::fvScheduler()
 			 */
 			//----------------------
 			processFFT.CalculateFft(pInpDataBuf, unDataLen);
+			//processFFT.SignalStatistic(pInpDataBuf, unDataLen);
 			DataAquisition.fvReleaseBuf(pInpDataBuf);
 		}
 	}
