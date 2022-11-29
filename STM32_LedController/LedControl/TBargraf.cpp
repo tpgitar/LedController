@@ -6,6 +6,7 @@
  */
 
 #include "TBargraf.h"
+#include "colors.h"
 
 //namespace std {
 
@@ -21,14 +22,21 @@ void TBargraf::fvBargrafEffect(uint16_t unNormValue)
 	else
 	{
 		if(unMaxLedNumb)
-		{unMaxLedNumb--;}
+		{
+			unMaxLedNumb--;
+
+		}
 		unDelay = unCfgDelay;
 	}
 
 
 	if(unActivLedNumb > unMaxLedNumb)
 	{
+
 		unMaxLedNumb = unActivLedNumb;
+
+
+
 		unDelay = unCfgPreDelay;
 	}
 
@@ -46,6 +54,7 @@ void TBargraf::fvBargrafEffect(uint16_t unNormValue)
 		}
 	}
 	SetBrigtness(unMaxLedNumb,10);
+	//SetHue(unMaxLedNumb,CO_COLOR_140_BLUE_BRIGHT);
 }
 //-----------------------------------------------------------------------------------------------------
 

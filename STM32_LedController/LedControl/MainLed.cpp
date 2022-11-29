@@ -25,11 +25,12 @@ FftBar fftBar10kHz(&processFFT,8000,12000);
 
 */
 
-FftBar fftBar100Hz(&processFFT,110,130);
+//FftBar fftBar100Hz(&processFFT,110,130,0.8);
+FftBar fftBar100Hz(&processFFT,120,140,0.8);
 FftBar fftBar1kHz(&processFFT,900,1100);
 FftBar fftBar3kHz(&processFFT,2700,3300);
-FftBar fftBar7kHz(&processFFT,6300,7700);
-FftBar fftBar10kHz(&processFFT,8000,12000);
+FftBar fftBar7kHz(&processFFT,6300,7700, 1.1);
+FftBar fftBar10kHz(&processFFT,8000,12000, 1.1);
 
 
 

@@ -38,18 +38,21 @@ private:
 	uint16_t unNormalizedVal;
 	uint16_t unSlewRateRaise;
 	uint16_t unSlewRateFall;
+	float32_t fGain;
 
 
 public:
 
 	LowPassFilter lowPassFilter_InpSign;
-	FftBar(ProcessFft* pProcessFftInp = NULL,uint16_t unFreqMinInp = 0,uint16_t unFreqMaxInp = 20000):
+
+	FftBar(ProcessFft* pProcessFftInp = NULL,uint16_t unFreqMinInp = 0,uint16_t unFreqMaxInp = 20000,float32_t fGainInp = 1.0):
 		unFreqMin(unFreqMinInp),
 		unFreqMax(unFreqMaxInp),
 		pProcessFft(pProcessFftInp)
 	{
 		unSlewRateRaise = 70;
 		unSlewRateFall = 35;
+		fGain = fGainInp;
 
 	};
 

@@ -29,8 +29,8 @@ void ProcessFft::ConvIntToFloat(uint16_t* pInp,uint16_t unDataLen)
 
 }
 //--------------------------------------------------------------------------
-#define CO_SIGN_LEVEL_PRESENT  400
-#define CO_SIGN_LEVEL_NOT_PRESENT  300
+#define CO_SIGN_LEVEL_PRESENT  300
+#define CO_SIGN_LEVEL_NOT_PRESENT  200
 
 #define CO_CNT_SIGNAL_PRESENT 30
 
