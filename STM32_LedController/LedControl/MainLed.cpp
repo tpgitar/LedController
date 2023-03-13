@@ -26,11 +26,12 @@ FftBar fftBar10kHz(&processFFT,8000,12000);
 */
 
 //FftBar fftBar100Hz(&processFFT,110,130,0.8);
-FftBar fftBar100Hz(&processFFT,120,140,0.8);
-FftBar fftBar1kHz(&processFFT,900,1100);
-FftBar fftBar3kHz(&processFFT,2700,3300);
-FftBar fftBar7kHz(&processFFT,6300,7700, 1.1);
-FftBar fftBar10kHz(&processFFT,8000,12000, 1.1);
+#define  CO_TEMP 1.1
+FftBar fftBar100Hz(&processFFT,120,140,0.7 * CO_TEMP);
+FftBar fftBar1kHz(&processFFT,900,1100, 1 * CO_TEMP );
+FftBar fftBar3kHz(&processFFT,2700,3300, 1 * CO_TEMP);
+FftBar fftBar7kHz(&processFFT,6300,7700, 1.1 * CO_TEMP);
+FftBar fftBar10kHz(&processFFT,8000,12000, 1.1 * CO_TEMP);
 
 
 
@@ -243,7 +244,7 @@ struct def_led_statem_machine
 
 };
 
-#define CO_TIMEOUT_CHANGE_MODE   (50*20*1) //10 sek for test  //(50*60*10) //10min
+#define CO_TIMEOUT_CHANGE_MODE  (50*60*10) //10 sek for test  //(50*60*10) //10min
 
 struct def_led_statem_machine State;
 
@@ -481,7 +482,10 @@ void fvSpectrum()
 		for(uint16_t unLineIdx = 0; unLineIdx < CO_NUMB_OF_LED_LINES; unLineIdx++)
 		{
 			//LedLine[unLineIdx].SetHue(0,CO_NUMB_LEDS_IN_LINE,75 * unLineIdx);
-			LedLine[unLineIdx].fvColorPattern1(80,360,2);
+
+
+			LedLine[unLineIdx].fvColorPattern1(80,360,3);
+			//Bargraf[0].fvColorPattern1(80,360,3);
 
 
 			LedLine[unLineIdx].SetBrightness(0,CO_NUMB_LEDS_IN_LINE,0);
@@ -501,11 +505,11 @@ void fvSpectrum()
 		Bargraf[4].fvBargrafEffect(processFFT.fnGetValByFreqRange(8000, 12000));
 */
 
-		Bargraf[0].fvBargrafEffect(fftBar100Hz.fnGetNormalizedVal());
-		Bargraf[1].fvBargrafEffect(fftBar1kHz.fnGetNormalizedVal());
-		Bargraf[2].fvBargrafEffect(fftBar3kHz.fnGetNormalizedVal());
-		Bargraf[3].fvBargrafEffect(fftBar7kHz.fnGetNormalizedVal());
-		Bargraf[4].fvBargrafEffect(fftBar10kHz.fnGetNormalizedVal());
+		Bargraf[0].fvBargrafEffect1(fftBar100Hz.fnGetNormalizedVal());
+		Bargraf[1].fvBargrafEffect1(fftBar1kHz.fnGetNormalizedVal());
+		Bargraf[2].fvBargrafEffect1(fftBar3kHz.fnGetNormalizedVal());
+		Bargraf[3].fvBargrafEffect1(fftBar7kHz.fnGetNormalizedVal());
+		Bargraf[4].fvBargrafEffect1(fftBar10kHz.fnGetNormalizedVal());
 
 	}
 }
@@ -533,7 +537,7 @@ void fvVanishEffect()
 	if(unLocTimer % 20 == 0)
 	{
 
-		uint16_t unLedIdx = RandomGen.funGetRandomValue(0, CO_WS2812_NUMB_OF_LEDS);
+		uint16_t unLedIdx = RandomGen.funGetRandomValue(0, CO_WS2812_NUMB_OF_LEDS - 1);
 
 
 		if(Led[unLedIdx].unTimer == 0)
@@ -798,13 +802,13 @@ void fvMainLed20ms()
 
 //	State.unMainTask = EN_LED_EFFECT_SPECTRUM;
 
+	//State.unPomTask = 1;
 	if(State.unPomTask == 1)
 	{
 		fvSpectrum();
 	}
 	else
 	{
-
 
 
 
@@ -856,11 +860,13 @@ void fvMainLed20ms()
 				 fvSinus2HalfEffect();
 			 }break;
 
+
 		 	 case 6:
 		 	 {
 		 		 fvVanishEffect();
 
 		 	 }break;
+
 
 
 

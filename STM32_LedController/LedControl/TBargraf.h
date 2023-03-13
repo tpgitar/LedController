@@ -44,6 +44,7 @@ public:
 
 
 	void fvBargrafEffect(uint16_t unNormValue);
+	void fvBargrafEffect1(uint16_t unNormValue);
 
 
 

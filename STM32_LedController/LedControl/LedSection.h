@@ -73,6 +73,8 @@ protected:
  	void fvToggle(uint16_t unLedNo);
 
  	void Refresh(void);
+ 	//void fvColorPattern1(uint16_t unStartVal, uint16_t unStopVal, uint16_t unFactor);
+ 	void fvColorPattern1(uint16_t unStartVal = 0,uint16_t unStopVal = 360, uint16_t unFactor = 1);
 
 
 

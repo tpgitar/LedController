@@ -243,7 +243,7 @@ void TLedRgbLine::fvSnowEffect(t_openargs openArg, uint16_t unColor)
 }
 
 
-void TLedRgbLine::fvColorPattern1(uint16_t unStartVal, uint16_t unStopVal, uint16_t unFactor)
+void TLedRgbSection::fvColorPattern1(uint16_t unStartVal, uint16_t unStopVal, uint16_t unFactor)
 {
 /*
 	uint16_t unStartVal = 80;
