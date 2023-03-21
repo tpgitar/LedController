@@ -92,7 +92,7 @@ void TranferInterrupt(uint8_t* pOutData)
 
 			ucBuf = (pLed->ucGreen & 0x0f);
 			*pOutData32++ = ulTable[ucBuf];
-			//---
+			//----
 
 			ucBuf = (pLed->ucRed >> 4);
 			*pOutData32++ = ulTable[ucBuf];
